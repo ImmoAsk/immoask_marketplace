@@ -32,7 +32,7 @@ export default function PropertyDetailBookFurnishedProperty({
   property,
   propertyHref,
   title = "Réserver un séjour meublé",
-  note = "Les versements sont remboursés entièrement en cas de mis en indisponibilité par le propriétaire ou l'agent immobilier.",
+  note = "Les versements sont remboursés entièrement en cas de mise en indisponibilité par le propriétaire ou l'agent immobilier.",
   submitLabel = "Réserver le séjour",
   disabled = false,
   userRole,
