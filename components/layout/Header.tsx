@@ -1,6 +1,7 @@
 import Link from "next/link"
 import type { ReactNode } from "react"
 
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics"
 import HeaderNav from "@/components/layout/HeaderNav"
 import MobileMenu from "@/components/layout/MobileMenu"
 import Button from "@/components/ui/Button"
@@ -44,6 +45,7 @@ function IconCircle({
 export default function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-white">
+      <GoogleAnalytics />
       <Container className="flex h-16 min-w-0 items-center justify-between gap-2 sm:h-[4.5rem] sm:gap-4">
         <Link href="/" aria-label="ImmoAsk - Accueil" className="shrink-0">
           <img

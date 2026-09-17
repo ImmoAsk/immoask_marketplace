@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics"
 import Separator from "@/components/ui/Separator"
 import { AUTH_SIGNIN_PATH, AUTH_SIGNUP_PATH } from "@/lib/routing/auth"
 import AccountAuthenticated from "@/features/account/components/AccountAuthenticated"
@@ -21,6 +22,7 @@ export default function HeaderNav() {
       className="hidden items-center gap-6 lg:flex"
       aria-label="Navigation principale"
     >
+      <GoogleAnalytics />
       {headerNavLinks.map((link) => (
         <Link
           key={link.href}
