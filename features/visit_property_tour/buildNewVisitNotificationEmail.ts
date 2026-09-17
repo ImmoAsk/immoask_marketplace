@@ -45,7 +45,7 @@ export function toNewVisitNotificationEmailInput({
 }): NewVisitNotificationEmailInput | null {
   const to = visitor?.email?.trim()
 
-  if (!to) {
+  if (!visitor || !to) {
     return null
   }
 
