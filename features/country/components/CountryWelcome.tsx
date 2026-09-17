@@ -206,14 +206,13 @@ export default async function CountryWelcome({
                   Besoin d&apos;un accompagnement ?
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-white/90">
-                  Nos conseillers répondent en direct sur WhatsApp pour trouver
-                  la perle rare sous 24h.
+                  Vous avez un grand projet immobilier ? Notre équipe est à votre disposition pour vous accompagner sous 24h.
                 </p>
                 <Link
                   href="/contact"
                   className="mt-4 flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-white text-sm font-semibold text-primary transition-colors hover:bg-primary-soft"
                 >
-                  Ouvrir WhatsApp direct
+                  Nous contacter
                   <span aria-hidden="true">→</span>
                 </Link>
               </div>
