@@ -9,8 +9,7 @@ import type {
 export const ACCOUNT_SESSION_STORAGE_KEY = "immoask.account.session"
 export const ACCOUNT_SESSION_EVENT = "immoask-account-session"
 
-const AVATARS_BASE =
-  "https://immoaskbetaapi.omnisoft.africa/public/storage/uploads/visuels/avatars/"
+const AVATARS_BASE = "https://immoaskprodapi.omnisoft.africa/storage/uploads/visuels/avatars/"
 
 export function resolveAccountAvatar(avatar?: string | null) {
   const value = avatar?.trim()

@@ -86,8 +86,7 @@ export async function getFilteringProperties({
   return properties.map(toCatalogProperty)
 }
 
-const VISUELS_BASE =
-  "https://immoaskbetaapi.omnisoft.africa/public/storage/uploads/visuels/proprietes/"
+const VISUELS_BASE = "https://immoaskprodapi.omnisoft.africa/storage/uploads/visuels/proprietes/"
 
 const OFFER_LABELS: Record<string, string> = {
   vendre: "ACQUISITION",

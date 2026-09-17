@@ -6,11 +6,11 @@ import { getCountry } from "@/lib/routing/countries"
 import type { Property, PropertyAgent, PropertyInfrastructure } from "../types"
 
 const VISUELS_BASE =
-  "https://immoaskbetaapi.omnisoft.africa/public/storage/uploads/visuels/proprietes/"
+  "https://immoaskprodapi.omnisoft.africa/storage/uploads/visuels/proprietes/"
 const AVATARS_BASE =
-  "https://immoaskbetaapi.omnisoft.africa/public/storage/uploads/visuels/avatars/"
+  "https://immoaskprodapi.omnisoft.africa/storage/uploads/visuels/avatars/"
 const ORGANISATIONS_BASE =
-  "https://immoaskbetaapi.omnisoft.africa/public/storage/uploads/visuels/organisations/"
+  "https://immoaskprodapi.omnisoft.africa/storage/uploads/visuels/organisations/"
 
 export const getProperty = cache(async function getProperty(
   propertyNuo: number,
