@@ -23,7 +23,7 @@ export function buildPropertyDetailBookFurnishedProperty({
     propertyHref,
     userRole: bookProperty.roleName ?? null,
     title: "Réserver un séjour meublé",
-    note: "Le propriétaire ou l'agent confirmera la disponibilité du bien avant tout règlement des frais de service.",
+    note: "Les versements sont remboursés entièrement en cas de mise en indisponibilité par le propriétaire ou l'agent immobilier.",
     submitLabel: "Réserver le séjour",
     disabled: occupied,
   }

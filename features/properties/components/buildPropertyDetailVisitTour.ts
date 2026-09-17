@@ -14,7 +14,7 @@ export function buildPropertyDetailVisitTour({
     property: toVisitPropertyTourProperty(property),
     propertyHref,
     title: "Planifier une visite physique accompagnée",
-    note: "L'agent immobilier confirmera la disponibilité du bien avec vous avant tout règlement du droit de visite.",
+    note: "Les droits de visite sont remboursés entièrement en cas de changement de disponibilité par le propriétaire ou l'agent immobilier.",
     submitLabel: "Planifier une visite",
     disabled: occupied,
   }
