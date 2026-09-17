@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="472" height="183" viewBox="0 0 472 183" fill="none" role="img" aria-labelledby="immoaskLogoTitle">
+  <title id="immoaskLogoTitle">ImmoAsk</title>
+
+  <path
+    d="M27.5 168 V113 L176 8.5 L257 54.5 L347 107"
+    stroke="#1aa0e0"
+    stroke-width="11.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <rect x="266" y="27" width="17" height="36" rx="4.5" fill="#a19fa0" />
+
+  <rect x="149" y="42" width="20" height="20" rx="5" fill="#1aa0e0" />
+  <rect x="177" y="34" width="27" height="26" rx="6" fill="#a19fa0" />
+  <rect x="146" y="70" width="26" height="28" rx="6" fill="#1aa0e0" />
+  <rect x="181" y="73" width="20" height="20" rx="5" fill="#1aa0e0" />
+
+  <g fill="#1aa0e0">
+    <rect x="46" y="110" width="64" height="63" rx="13" />
+    <rect x="121" y="110" width="64" height="63" rx="13" />
+    <rect x="195" y="110" width="64" height="63" rx="13" />
+    <rect x="269" y="110" width="64" height="63" rx="13" />
+  </g>
+
+  <!-- I, M, M, O: identical 36×36 box, origin at tile center -->
+  <g fill="#111">
+    <g transform="translate(78 141.5)">
+      <path d="M-10-18h20v4H5v28h5v4h-20v-4H-5v-28H-10z" />
+    </g>
+    <g transform="translate(153 141.5)">
+      <path d="M-18-18H-10V-2L0-14 10-2V-18h8v36h-8V8L0 18-10 8v10h-8z" />
+    </g>
+    <g transform="translate(227 141.5)">
+      <path d="M-18-18H-10V-2L0-14 10-2V-18h8v36h-8V8L0 18-10 8v10h-8z" />
+    </g>
+    <g fill-rule="evenodd" transform="translate(301 141.5)">
+      <path d="M0-18a18 18 0 1 1 0 36 18 18 0 1 1 0-36zm0 9a9 9 0 1 0 0 18 9 9 0 1 0 0-18z" />
+    </g>
+  </g>
+
+  <path fill="#bdbdbd" fill-rule="evenodd" d="M367.6 118.2 395.4 171h-13.2l-5-11.8h-19.2l-5 11.8h-13.2l27.8-52.8zm-1.8 20.4-6.8 16h13.6z" />
+  <path fill="#fff" d="M365.8 138.6 371 154.6h-10.4z" />
+
+  <path
+    fill="#a19fa0"
+    d="M415.4 144.6c0-1.6-1.8-2.8-5.2-2.8s-5.4 1.2-5.4 3.2 1.6 3 5.8 4.4c6.8 2.4 10.8 5.6 10.8 11.2 0 6.6-5.4 11.2-12.6 11.2-6.8 0-11.6-3.8-12.2-9.8h6.2c.4 2.8 2.6 4.6 6 4.6 3.8 0 6.4-2.4 6.4-6s-2.2-5.2-7.2-7c-6.4-2.2-9.6-5.2-9.6-10.2 0-6 5-10.2 12-10.2 6.2 0 10.8 3.2 11 8.4z"
+  />
+
+  <path fill="#a19fa0" d="M433.2 119h10.2v23.2l16.4-17.8h12.6l-17.8 18.8 19.4 29.3h-12.4L445 150.2l-1.6 1.6v19.7h-10.2z" />
+</svg>

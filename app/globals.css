@@ -1,0 +1,211 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+@import "react-phone-number-input/style.css";
+
+:root {
+  --background: #ffffff;
+  --foreground: #0b1f3a;
+  --primary: #0096d6;
+  --primary-hover: #007eb8;
+  --primary-soft: #e6f4fa;
+  --hero: color-mix(in srgb, #1aa0e0 12%, white);
+  --hero-search: color-mix(in srgb, #1aa0e0 6%, white);
+  --navy: #0b1f3a;
+  --muted: #5c6b7a;
+  --subtle: #8a96a3;
+  --surface: #f5f8fb;
+  --border: #e2e8ee;
+  --success: #15803d;
+  --success-soft: #ecfdf3;
+  --warning: #b45309;
+  --warning-soft: #fff7ed;
+  --danger: #b91c1c;
+  --danger-soft: #fef2f2;
+  --ring: #0096d6;
+  --shadow-card: 0 1px 3px 0 rgb(11 31 58 / 0.06),
+    0 1px 2px -1px rgb(11 31 58 / 0.04);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
+  --color-hero: var(--hero);
+  --color-hero-search: var(--hero-search);
+  --color-navy: var(--navy);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-raleway), "Raleway", sans-serif;
+  --shadow-card: var(--shadow-card);
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --animate-marquee: marquee 40s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes listing-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.listing-reveal {
+  animation: listing-reveal 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.listing-reveal-delay {
+  animation-delay: 120ms;
+}
+
+.listing-illustration {
+  transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .listing-illustration:hover {
+    transform: translateY(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .listing-reveal,
+  .listing-reveal-delay,
+  .listing-illustration {
+    animation: none;
+    transition: none;
+  }
+}
+
+.hero-wash {
+  background-color: #ffffff;
+  background-image:
+    radial-gradient(
+      ellipse 48% 95% at 0% 0%,
+      color-mix(in srgb, #1aa0e0 42%, white) 0%,
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse 42% 90% at 100% 0%,
+      color-mix(in srgb, #0096d6 26%, white) 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 36% 70% at 100% 100%,
+      color-mix(in srgb, #1aa0e0 18%, #f5f8fb) 0%,
+      transparent 60%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, #1aa0e0 4%, white) 0%,
+      #ffffff 100%
+    );
+}
+
+html {
+  color-scheme: light;
+  overflow-x: clip;
+}
+
+body {
+  overflow-x: clip;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-raleway), "Raleway", sans-serif;
+}
+
+.property-detail-location-map.leaflet-container {
+  background: var(--surface);
+  font-family: inherit;
+}
+
+.property-detail-location-marker.leaflet-div-icon {
+  background: transparent;
+  border: none;
+}
+
+.catalog-map-view.leaflet-container {
+  background: var(--surface);
+  font-family: inherit;
+}
+
+.AccountPhoneInput {
+  --PhoneInput-color--focus: var(--primary);
+  --PhoneInputCountrySelect-marginRight: 0.65rem;
+  --PhoneInputCountrySelectArrow-color: var(--subtle);
+  --PhoneInputCountrySelectArrow-opacity: 0.7;
+  --PhoneInputCountryFlag-borderColor: var(--border);
+  --PhoneInputCountryFlag-height: 1rem;
+
+  height: 2.75rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: #fff;
+  padding-left: 0.75rem;
+  padding-right: 0.25rem;
+  box-shadow: none;
+}
+
+.AccountPhoneInput.PhoneInput--focus,
+.AccountPhoneInput:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ring) 35%, transparent);
+}
+
+.AccountPhoneInput--invalid {
+  border-color: var(--danger);
+}
+
+.AccountPhoneInput--invalid.PhoneInput--focus,
+.AccountPhoneInput--invalid:focus-within {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--danger) 25%, transparent);
+}
+
+.AccountPhoneInput .PhoneInputCountry {
+  margin-right: 0.65rem;
+  padding-right: 0.65rem;
+  border-right: 1px solid var(--border);
+}
+
+.AccountPhoneInput .PhoneInputInput,
+.AccountPhoneInput-input {
+  height: 100%;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+  font-size: 0.875rem;
+  color: var(--foreground);
+}
+
+.AccountPhoneInput .PhoneInputInput::placeholder,
+.AccountPhoneInput-input::placeholder {
+  color: var(--subtle);
+}
