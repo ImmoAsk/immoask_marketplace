@@ -134,6 +134,7 @@ export default function VisitPropertyTourModal({
             const emailInput = toNewVisitNotificationEmailInput({
               visitor,
               visit,
+              property,
             })
             const visitInput = toSaveVisitTourInput({
               visit,

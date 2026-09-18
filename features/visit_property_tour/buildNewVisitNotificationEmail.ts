@@ -1,3 +1,4 @@
+import type { VisitPropertyTourProperty } from "@/features/visit_property_tour/types"
 import type { PayVisitFeeVisit, PayVisitFeeVisitor } from "@/features/payment/types"
 import type { NewVisitNotificationEmailInput } from "@/lib/api/types"
 
@@ -36,12 +37,41 @@ function formatEmailTime(value: string) {
   return `${hours} h ${minutes}`
 }
 
+function emailString(value: unknown, fallback = "") {
+  if (typeof value === "string") {
+    const trimmed = value.trim()
+    return trimmed || fallback
+  }
+
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return String(value)
+  }
+
+  return fallback
+}
+
+function propertyEmailName(property: VisitPropertyTourProperty) {
+  const title = emailString(property.title)
+
+  if (title) {
+    return title
+  }
+
+  const nuo = property.nuo ? `N°${property.nuo}` : ""
+  const type = emailString(property.propertyType)
+  const area = property.area != null ? `${property.area}m²` : ""
+
+  return [nuo, type, area].filter(Boolean).join(" ") || "Bien immobilier"
+}
+
 export function toNewVisitNotificationEmailInput({
   visitor,
   visit,
+  property,
 }: {
   visitor?: PayVisitFeeVisitor | null
   visit: PayVisitFeeVisit
+  property: VisitPropertyTourProperty
 }): NewVisitNotificationEmailInput | null {
   const to = visitor?.email?.trim()
 
@@ -51,12 +81,13 @@ export function toNewVisitNotificationEmailInput({
 
   const userName =
     visitor.firstname?.trim() || visitor.name?.trim().split(/\s+/)[0] || "Client"
+  const propertyName = propertyEmailName(property)
 
   return {
     to,
     userName,
     date: formatEmailDate(visit.dateVisit),
     timeVisit: formatEmailTime(visit.hourVisit),
-    subject: "Votre visite ImmoAsk",
+    subject: `Votre visite ImmoAsk — ${propertyName}`,
   }
 }
