@@ -1,3 +1,4 @@
+import { resolveSessionUserId } from "@/features/account/session"
 import type { AccountSession } from "@/features/account/types"
 import type { PayVisitFeeVisitor } from "@/features/payment/types"
 import type {
@@ -47,7 +48,7 @@ export function toSaveVisitTourInput({
     return null
   }
 
-  const user_id = toOptionalId(session?.user.id)
+  const user_id = resolveSessionUserId(session)
   const email_visitor = toOptionalText(visitor?.email)
   const telephone_visitor = toOptionalText(visitor?.phone)
   const fullname_visitor = toOptionalText(visitor?.name)

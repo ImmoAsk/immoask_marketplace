@@ -1,3 +1,4 @@
+import { resolveSessionUserId } from "@/features/account/session"
 import type { AccountSession } from "@/features/account/types"
 import type {
   BookFurnishedPropertyProperty,
@@ -47,7 +48,7 @@ export function toSaveFurnishedBookingInput({
     return null
   }
 
-  const user_id = toOptionalId(session?.user.id)
+  const user_id = resolveSessionUserId(session)
   const email_reservateur = toOptionalText(guest?.email)
   const phone_reservateur = toOptionalText(guest?.phone)
   const fullname_reservateur = toOptionalText(guest?.name)

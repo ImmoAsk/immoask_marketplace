@@ -194,6 +194,29 @@ export function sessionFromRegister(
     return null
   }
 
+  const tokenUserId = resolveSessionUserId({
+    accessToken: result.tokens.access_token,
+    refreshToken: null,
+    tokenType: null,
+    expiresIn: null,
+    user: {
+      id: null,
+      name: input.name,
+      email: input.email,
+      phone: input.phone,
+      avatar: null,
+      avatarUrl: null,
+      role: null,
+    },
+    login: {
+      access_token: result.tokens.access_token,
+      token_type: null,
+      expires_in: null,
+      refresh_token: null,
+      user: null,
+    },
+  })
+
   const login: LoginAccountResult = {
     access_token: result.tokens.access_token,
     token_type: null,
@@ -201,7 +224,7 @@ export function sessionFromRegister(
     refresh_token: null,
     user: {
       name: input.name,
-      id: null,
+      id: tokenUserId ?? null,
       email: input.email,
       phone: input.phone,
       avatar: null,
