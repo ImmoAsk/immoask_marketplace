@@ -17,7 +17,7 @@ export type PayNowProps = PayNowInput & {
   className?: string
   disabled?: boolean
   onPay?: () => void | Promise<void>
-  onSuccess?: (result: PayNowResult) => void
+  onSuccess?: (result: PayNowResult) => void | Promise<void>
   onError?: (error: Error) => void
 }
 

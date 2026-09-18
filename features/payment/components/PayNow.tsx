@@ -70,8 +70,19 @@ export default function PayNow({
         throw new Error(result.message || "Le paiement n'a pas pu être initialisé.")
       }
 
+      // Show success Feedback first, then open the gateway so the user
+      // still sees confirmation if the popup is blocked / page navigates.
+      try {
+        await onSuccessRef.current?.(result)
+      } catch {
+        // Success UI must not block the payment gateway redirect.
+      }
+
+      await new Promise<void>((resolve) => {
+        window.setTimeout(resolve, 300)
+      })
+
       openPaymentUrl(result.payment_url)
-      onSuccessRef.current?.(result)
     } catch (caught) {
       const nextError =
         caught instanceof Error

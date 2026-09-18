@@ -159,10 +159,10 @@ export default function BookFurnishedPropertyModal({
             ])
           }}
           onPaid={async (result) => {
-            await onSubmit?.(booking)
-            await onPaid?.(result, booking)
             setFeedbackStatus("success")
             setStep("feedback")
+            await onSubmit?.(booking)
+            await onPaid?.(result, booking)
           }}
           onError={() => {
             setFeedbackStatus("failure")
