@@ -27,6 +27,7 @@ export default function ServiceCard({
   title,
   subtitle,
   href,
+  onClick,
   className,
 }: ServiceCardProps) {
   const classNames = cn(
@@ -54,6 +55,14 @@ export default function ServiceCard({
       <ChevronIcon />
     </>
   )
+
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} className={classNames}>
+        {content}
+      </button>
+    )
+  }
 
   if (href) {
     return (

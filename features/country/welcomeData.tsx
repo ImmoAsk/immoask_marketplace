@@ -1,12 +1,12 @@
 import type { ReactNode } from "react"
 
 import type { RealEstateAgentCardProps } from "@/features/realestate_agent_card/types"
-import { AUTH_SIGNUP_PATH, MOBILE_APP_LINK } from "@/lib/routing/auth"
 
 export type WelcomeService = {
   title: string
   subtitle: string
-  href: string
+  href?: string
+  opensMobileAppAd?: boolean
   icon: ReactNode
 }
 
@@ -114,19 +114,19 @@ export function getWelcomeServices(countryCode: string): WelcomeService[] {
     {
       title: "Créer un contrat de gestion",
       subtitle: "Sécurisez vos revenus locatifs",
-      href: MOBILE_APP_LINK,
+      opensMobileAppAd: true,
       icon: <DocumentIcon />,
     },
     {
       title: "Payer un loyer",
       subtitle: "Paiement mobile Mixx & Flooz",
-      href: MOBILE_APP_LINK,
+      opensMobileAppAd: true,
       icon: <CardIcon />,
     },
     {
       title: "Gérer un bien immobilier",
       subtitle: "Espace propriétaire et syndic",
-      href: MOBILE_APP_LINK,
+      opensMobileAppAd: true,
       icon: <ChartIcon />,
     },
   ]

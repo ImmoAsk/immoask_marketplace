@@ -5,7 +5,6 @@ import Container from "@/components/ui/Container"
 import { buildLeftSideCatalogFiltering } from "@/features/catalog/components/buildLeftSideCatalogFiltering"
 import { getLatestProperties } from "@/features/catalog/queries/getLatestProperties"
 import SearchBar from "@/features/search_bar/components/SearchBar"
-import ServiceCard from "@/features/service_card/components/ServiceCard"
 import { buildStatisticCards } from "@/features/statistic_card/components/buildStatisticCards"
 import StatisticCard from "@/features/statistic_card/components/StatisticCard"
 import {
@@ -25,6 +24,7 @@ import {
   countryWelcomePreposition,
 } from "./buildCountryWelcomeMetadata"
 import WelcomeListings from "./WelcomeListings"
+import WelcomeServices from "./WelcomeServices"
 
 export default async function CountryWelcome({
   countryCode,
@@ -170,17 +170,7 @@ export default async function CountryWelcome({
               <h2 className="mb-3 text-left text-lg font-bold tracking-tight text-navy lg:sr-only">
                 Services
               </h2>
-              <div className="flex flex-col gap-3">
-                {services.map((service) => (
-                  <ServiceCard
-                    key={service.title}
-                    href={service.href}
-                    title={service.title}
-                    subtitle={service.subtitle}
-                    icon={service.icon}
-                  />
-                ))}
-              </div>
+              <WelcomeServices services={services} />
 
               <div className="mt-3 rounded-[22px] bg-primary px-5 py-5 text-left text-white">
                 <p className="flex items-center gap-2 text-sm font-bold">

@@ -5,5 +5,6 @@ export type ServiceCardProps = {
   title: string
   subtitle: string
   href?: string
+  onClick?: () => void
   className?: string
 }
