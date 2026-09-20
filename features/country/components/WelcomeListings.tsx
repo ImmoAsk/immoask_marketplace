@@ -16,12 +16,14 @@ import { createPropertyLink } from "@/lib/utils/createPropertyLink"
 
 type WelcomeListingsProps = {
   country: string
+  paysId: number | null
   initialTabId: string
   initialProperties: Property[]
 }
 
 export default function WelcomeListings({
   country,
+  paysId,
   initialTabId,
   initialProperties,
 }: WelcomeListingsProps) {
@@ -48,10 +50,14 @@ export default function WelcomeListings({
     setLoading(true)
 
     try {
-      const items = await getLatestProperties({
-        usage: nextTab.usage,
-        limit: 9,
-      })
+      const items =
+        paysId != null
+          ? await getLatestProperties({
+              paysId,
+              usage: nextTab.usage,
+              limit: 9,
+            })
+          : []
 
       if (currentRequest === requestId.current) {
         setProperties(items)

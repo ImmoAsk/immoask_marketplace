@@ -13,6 +13,36 @@ export const countries = {
     currency: "FCFA",
     callingCode: 229,
   },
+  ci: {
+    code: "ci",
+    name: "Côte d'Ivoire",
+    currency: "FCFA",
+    callingCode: 225,
+  },
+  ne: {
+    code: "ne",
+    name: "Niger",
+    currency: "FCFA",
+    callingCode: 237,
+  },
+  ml: {
+    code: "ml",
+    name: "Mali",
+    currency: "FCFA",
+    callingCode: 223,
+  },
+  bf: {
+    code: "bf",
+    name: "Burkina Faso",
+    currency: "FCFA",
+    callingCode: 226,
+  },
+  gn: {
+    code: "gn",
+    name: "Guinée",
+    currency: "GNF",
+    callingCode: 224,
+  },
 } as const
 
 export function getCountry(code: string) {

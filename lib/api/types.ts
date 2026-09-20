@@ -36,6 +36,7 @@ export interface PropertyApi {
   ): Promise<PropertyApiResponse[]>
 
   getLatestProperties(options?: {
+    paysId?: number
     limit?: number
     usage?: number
   }): Promise<PropertyApiResponse[]>
@@ -99,6 +100,7 @@ export interface PropertyListFilters {
   categorieId?: number | string
   villeId?: number | string
   quartierId?: number | string
+  paysId?: number
   usage?: number | string
   limit?: number
 }
@@ -117,6 +119,7 @@ export interface PropertyFilteringFilters extends PropertyListFilters {
 export type PropertyFilteringVariables = {
   limit: number
   offreId?: string
+  paysId?: number
   usage?: number
   categorieId?: string
   villeId?: string

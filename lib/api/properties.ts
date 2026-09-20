@@ -204,6 +204,11 @@ function toFilteringVariables(
     variables.offreId = String(filters.offreId)
   }
 
+  const paysId = toOptionalId(filters.paysId)
+  if (paysId) {
+    variables.paysId = paysId
+  }
+
   const usage = toOptionalId(filters.usage)
   if (usage) {
     variables.usage = usage
@@ -288,6 +293,15 @@ function buildGetFilteringPropertiesQuery(variables: PropertyFilteringVariables)
     "offre_id",
     "String!",
     variables.offreId,
+  )
+  appendFilteringVariable(
+    variableDefs,
+    args,
+    graphqlVariables,
+    "paysId",
+    "pays_id",
+    "Int",
+    variables.paysId,
   )
   appendFilteringVariable(
     variableDefs,
@@ -718,13 +732,14 @@ async function getProperties(
 }
 
 async function getLatestProperties(
-  options: { limit?: number; usage?: number } = {},
+  options: { paysId?: number; limit?: number; usage?: number } = {},
 ): Promise<PropertyApiResponse[]> {
   const limit = options.limit ?? 9
 
-  if (options.usage) {
+  if (options.usage != null || options.paysId != null) {
     return getFilteringProperties({
-      usage: options.usage,
+      ...(options.paysId != null ? { paysId: options.paysId } : {}),
+      ...(options.usage != null ? { usage: options.usage } : {}),
       limit,
     })
   }

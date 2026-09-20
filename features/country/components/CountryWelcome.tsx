@@ -32,11 +32,15 @@ export default async function CountryWelcome({
 }: CountryWelcomeProps) {
   const initialTab = pickRandomSuperCategorieTab()
   const callingCode = getCountryCallingCode(countryCode)
+  const paysId = callingCode
   const [properties, propertyStatistics, cities] = await Promise.all([
-    getLatestProperties({
-      usage: initialTab.usage,
-      limit: 9,
-    }),
+    paysId != null
+      ? getLatestProperties({
+          paysId,
+          usage: initialTab.usage,
+          limit: 9,
+        })
+      : Promise.resolve([]),
     propertyApi.getPropertyStatistics(),
     callingCode ? getCities(callingCode) : Promise.resolve([]),
   ])
@@ -161,6 +165,7 @@ export default async function CountryWelcome({
             <div className="order-1 min-w-0 lg:order-2 lg:col-span-2">
               <WelcomeListings
                 country={countryCode}
+                paysId={paysId}
                 initialTabId={initialTab.id}
                 initialProperties={properties}
               />
