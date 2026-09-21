@@ -1,20 +1,40 @@
 "use client"
 
 import { useId, useState } from "react"
+import { useRouter } from "next/navigation"
 
 import Container from "@/components/ui/Container"
 import Radio, { RadioGroup } from "@/components/ui/Radio"
+import { useAccountSession } from "@/features/account/useAccountSession"
 import { cn } from "@/lib/cn"
 import type {
   ImmoAskPricingCustomerType,
   ImmoAskPricingProps,
 } from "@/features/pricing/types"
 import { isImmoAskPricingCustomerType } from "@/features/pricing/types"
-import LandlordSubscription from "@/features/subscriptions/components/LandlordSubscription"
 import AgentMarketPlaceSubscription from "@/features/subscriptions/components/AgentMarketPlaceSubscription"
+import { AGENT_MARKETPLACE_SUBSCRIPTION_COLUMNS } from "@/features/subscriptions/components/buildAgentMarketPlaceSubscription"
+import { LANDLORD_SUBSCRIPTION_COLUMNS } from "@/features/subscriptions/components/buildLandlordSubscription"
+import { PROPERTY_SEEKERS_SUBSCRIPTION_COLUMNS } from "@/features/subscriptions/components/buildPropertySeekersSubscription"
+import LandlordSubscription from "@/features/subscriptions/components/LandlordSubscription"
 import PropertySeekersSubscription from "@/features/subscriptions/components/PropertySeekersSubscription"
+import type { TemplateSubscriptionColumn } from "@/features/subscriptions/types"
+import { AUTH_SIGNUP_PATH } from "@/lib/routing/auth"
 
 import { buildImmoAskPricing } from "./buildImmoAskPricing"
+
+function resolveLoggedInPlanHref(
+  columns: TemplateSubscriptionColumn[],
+  planId: string,
+) {
+  const href = columns.find((column) => column.id === planId)?.ctaHref?.trim()
+
+  if (!href || href === AUTH_SIGNUP_PATH) {
+    return "/"
+  }
+
+  return href
+}
 
 export default function ImmoAskPricing({
   title,
@@ -29,6 +49,8 @@ export default function ImmoAskPricing({
   const defaults = buildImmoAskPricing()
   const options = customerOptions ?? defaults.customerOptions
   const formId = useId()
+  const router = useRouter()
+  const { session, ready } = useAccountSession()
   const [uncontrolledCustomerType, setUncontrolledCustomerType] =
     useState<ImmoAskPricingCustomerType>(
       defaultCustomerType ?? defaults.defaultCustomerType,
@@ -41,6 +63,22 @@ export default function ImmoAskPricing({
       setUncontrolledCustomerType(next)
     }
     onCustomerTypeChange?.(next)
+  }
+
+  function handleSelectPlan(
+    columns: TemplateSubscriptionColumn[],
+    planId: string,
+  ) {
+    if (!ready) {
+      return
+    }
+
+    if (!session) {
+      router.push(AUTH_SIGNUP_PATH)
+      return
+    }
+
+    router.push(resolveLoggedInPlanHref(columns, planId))
   }
 
   return (
@@ -102,15 +140,30 @@ export default function ImmoAskPricing({
 
         <div className="mt-8 sm:mt-10">
           {customerType === "chercheurs" ? (
-            <PropertySeekersSubscription embedded />
+            <PropertySeekersSubscription
+              embedded
+              onSelectColumn={(planId) =>
+                handleSelectPlan(PROPERTY_SEEKERS_SUBSCRIPTION_COLUMNS, planId)
+              }
+            />
           ) : null}
 
           {customerType === "proprietaires" ? (
-            <LandlordSubscription embedded />
+            <LandlordSubscription
+              embedded
+              onSelectColumn={(planId) =>
+                handleSelectPlan(LANDLORD_SUBSCRIPTION_COLUMNS, planId)
+              }
+            />
           ) : null}
 
           {customerType === "professionnels" ? (
-            <AgentMarketPlaceSubscription embedded />
+            <AgentMarketPlaceSubscription
+              embedded
+              onSelectColumn={(planId) =>
+                handleSelectPlan(AGENT_MARKETPLACE_SUBSCRIPTION_COLUMNS, planId)
+              }
+            />
           ) : null}
         </div>
 
