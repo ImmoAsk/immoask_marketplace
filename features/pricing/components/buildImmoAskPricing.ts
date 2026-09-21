@@ -21,6 +21,12 @@ export const IMMOASK_PRICING_CUSTOMER_OPTIONS: ImmoAskPricingCustomerOption[] = 
     description:
       "Offres Essentiel, Sérénité et Elite pour commercialiser ou gérer vos biens.",
   },
+  {
+    id: "professionnels",
+    label: "Agent, gestionnaire ou agence immobilière",
+    description:
+      "Offres JUST, SENIOR et BUSINESS pour publier, développer et automatiser votre activité.",
+  },
 ]
 
 export function buildImmoAskPricing(): Required<
@@ -31,7 +37,7 @@ export function buildImmoAskPricing(): Required<
   return {
     title: "Tarifications ImmoAsk",
     subtitle:
-      "Choisissez votre profil pour comparer les formules adaptées à votre besoin : recherche de logement ou parcelle, ou gestion de votre patrimoine immobilier.",
+      "Choisissez votre profil pour comparer les formules adaptées à votre besoin : recherche de logement ou parcelle, gestion de patrimoine, ou développement de votre activité professionnelle.",
     defaultCustomerType: "chercheurs",
     customerOptions: IMMOASK_PRICING_CUSTOMER_OPTIONS,
   }
@@ -40,7 +46,7 @@ export function buildImmoAskPricing(): Required<
 export function buildImmoAskPricingMetadata(): Metadata {
   const title = "Tarifications"
   const description =
-    "Comparez les tarifs ImmoAsk pour les chercheurs de logement ou parcelles et pour les propriétaires de biens immobiliers. Formules Standard, Medium, Premium, Essentiel, Sérénité et Elite."
+    "Comparez les tarifs ImmoAsk pour les chercheurs de logement, les propriétaires et les professionnels immobiliers. Formules Standard, Medium, Premium, Essentiel, Sérénité, Elite, JUST, SENIOR et BUSINESS."
 
   return {
     title,
@@ -50,9 +56,11 @@ export function buildImmoAskPricingMetadata(): Metadata {
       "abonnement immobilier",
       "chercheurs de logement",
       "propriétaires immobiliers",
+      "agents immobiliers",
       "ImmoAsk Business",
       "formules Standard Medium Premium",
       "Essentiel Sérénité Elite",
+      "JUST SENIOR BUSINESS",
     ],
     alternates: {
       canonical: IMMOASK_PRICING_PATH,

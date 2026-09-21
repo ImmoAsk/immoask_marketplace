@@ -31,6 +31,18 @@ export const DEFAULT_CONTACT_OBJECT_OPTIONS: ContactObjectOption[] = [
     id: "promotion-immobiliere",
     label: "Promotion immobilière dans une ville",
   },
+  {
+    id: "activation-compte-serenite",
+    label: "Finalisation et activation du compte Serenite",
+  },
+  {
+    id: "activation-compte-elite",
+    label: "Finalisation et activation du compte Elite",
+  },
+  {
+    id: "activation-compte-business",
+    label: "Finalisation et activation du compte Business",
+  },
 ]
 
 export function buildContactPageMetadata(): Metadata {

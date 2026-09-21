@@ -51,7 +51,7 @@ export const LANDLORD_SUBSCRIPTION_COLUMNS: TemplateSubscriptionColumn[] = [
     lightTitle: "Sérénité",
     namePricing:
       "Vous gérez vous-même. ImmoAsk vous donne les outils pour le faire simplement.",
-    subscription_amount: "4,9 %",
+    subscription_amount: "5,99 %",
     subscription_amount_xof: "des encaissements bruts",
     highlighted: true,
     ctaLabel: "Choisir Sérénité",

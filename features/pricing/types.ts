@@ -3,6 +3,7 @@ import type { ReactNode } from "react"
 export const IMMOASK_PRICING_CUSTOMER_TYPES = [
   "chercheurs",
   "proprietaires",
+  "professionnels",
 ] as const
 
 export type ImmoAskPricingCustomerType =
@@ -30,6 +31,7 @@ export function isImmoAskPricingCustomerType(
 ): value is ImmoAskPricingCustomerType {
   return (
     value === "chercheurs" ||
-    value === "proprietaires"
+    value === "proprietaires" ||
+    value === "professionnels"
   )
 }

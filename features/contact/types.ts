@@ -3,6 +3,9 @@ export const CONTACT_OBJECT_IDS = [
   "exploitation-terrains-titres",
   "construction-hotels",
   "promotion-immobiliere",
+  "activation-compte-serenite",
+  "activation-compte-elite",
+  "activation-compte-business",
 ] as const
 
 export type ContactObjectId = (typeof CONTACT_OBJECT_IDS)[number]
@@ -50,10 +53,5 @@ export type ContactFormProps = {
 export function isContactObjectId(
   value: string | null | undefined,
 ): value is ContactObjectId {
-  return (
-    value === "investissement-grande-envergure" ||
-    value === "exploitation-terrains-titres" ||
-    value === "construction-hotels" ||
-    value === "promotion-immobiliere"
-  )
+  return CONTACT_OBJECT_IDS.includes(value as ContactObjectId)
 }

@@ -29,3 +29,9 @@ export const PROPERTY_SEEKERS_PLAN_PRICES = {
   medium: { usd: 10.99, xof: usdToXof(10.99) },
   premium: { usd: 19.99, xof: usdToXof(19.99) },
 } as const
+
+export const AGENT_MARKETPLACE_PLAN_PRICES = {
+  just: { usd: 0, xof: 0 },
+  senior: { usd: 20.99, xof: usdToXof(20.99) },
+  business: { usd: 49.99, xof: usdToXof(49.99) },
+} as const

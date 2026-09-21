@@ -67,3 +67,9 @@ export type LandlordSubscriptionProps = Partial<TemplateSubscriptionProps> & {
   continueDisabled?: boolean
   onContinue?: () => void
 }
+
+export type AgentMarketPlaceSubscriptionProps = Partial<TemplateSubscriptionProps> & {
+  continueLabel?: string
+  continueDisabled?: boolean
+  onContinue?: () => void
+}

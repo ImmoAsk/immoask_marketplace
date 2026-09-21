@@ -17,6 +17,10 @@ export const ONBOARDING_PROPERTY_SEEKER_ROLE_ID = String(
   ACCOUNT_ROLE_IDS.locataire,
 )
 
+export const ONBOARDING_LANDLORD_ROLE_ID = String(ACCOUNT_ROLE_IDS.proprietaire)
+
+export const ONBOARDING_AGENT_ROLE_ID = String(ACCOUNT_ROLE_IDS.professionnel)
+
 export type OnboardingAccount = RegisterAccountInput
 
 export type OnboardingProcessProps = {

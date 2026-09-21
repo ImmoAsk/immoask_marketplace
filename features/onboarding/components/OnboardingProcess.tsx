@@ -16,12 +16,18 @@ import { buildPayPropertySeekersSubscriptionPlan } from "@/features/payment/comp
 import PayPropertySeekersSubscriptionPlan from "@/features/payment/components/PayPropertySeekersSubscriptionPlan"
 import { toPayVisitFeeVisitor } from "@/features/payment/components/toPayVisitFeeVisitor"
 import type { PayPropertySeekersSubscriptionSubscriber } from "@/features/payment/types"
+import AgentMarketPlaceSubscription from "@/features/subscriptions/components/AgentMarketPlaceSubscription"
+import { AGENT_MARKETPLACE_SUBSCRIPTION_COLUMNS } from "@/features/subscriptions/components/buildAgentMarketPlaceSubscription"
+import { LANDLORD_SUBSCRIPTION_COLUMNS } from "@/features/subscriptions/components/buildLandlordSubscription"
 import { PROPERTY_SEEKERS_SUBSCRIPTION_COLUMNS } from "@/features/subscriptions/components/buildPropertySeekersSubscription"
+import LandlordSubscription from "@/features/subscriptions/components/LandlordSubscription"
 import PropertySeekersSubscription from "@/features/subscriptions/components/PropertySeekersSubscription"
 import { AUTH_SIGNIN_PATH } from "@/lib/routing/auth"
 import { toAbsoluteUrl } from "@/lib/seo/site"
 import { cn } from "@/lib/cn"
 import {
+  ONBOARDING_AGENT_ROLE_ID,
+  ONBOARDING_LANDLORD_ROLE_ID,
   ONBOARDING_PROPERTY_SEEKER_ROLE_ID,
   type OnboardingAccount,
   type OnboardingFeedbackState,
@@ -29,7 +35,27 @@ import {
   type OnboardingStep,
 } from "@/features/onboarding/types"
 
-const DEFAULT_PLAN_ID = PROPERTY_SEEKERS_SUBSCRIPTION_COLUMNS[0]?.id ?? "standard"
+const DEFAULT_SEEKER_PLAN_ID =
+  PROPERTY_SEEKERS_SUBSCRIPTION_COLUMNS[0]?.id ?? "standard"
+const DEFAULT_LANDLORD_PLAN_ID =
+  LANDLORD_SUBSCRIPTION_COLUMNS[0]?.id ?? "essentiel"
+const DEFAULT_AGENT_PLAN_ID =
+  AGENT_MARKETPLACE_SUBSCRIPTION_COLUMNS[0]?.id ?? "just"
+
+const FREE_PLAN_IDS = new Set([
+  DEFAULT_SEEKER_PLAN_ID,
+  DEFAULT_LANDLORD_PLAN_ID,
+  DEFAULT_AGENT_PLAN_ID,
+])
+
+const CONTACT_PLAN_IDS = new Set([
+  "senior",
+  "business",
+  "serenite",
+  "elite",
+])
+
+type OnboardingAudience = "seeker" | "landlord" | "agent"
 
 function welcomeUserName(name: string) {
   return name.trim().split(/\s+/).filter(Boolean)[0] || "Client"
@@ -51,8 +77,36 @@ function sendOnboardingWelcomeEmail(input: OnboardingAccount) {
   })
 }
 
-function isPropertySeekerRole(userRole: string | number | null | undefined) {
-  return String(userRole ?? "") === ONBOARDING_PROPERTY_SEEKER_ROLE_ID
+function resolveAudience(
+  userRole: string | number | null | undefined,
+): OnboardingAudience | null {
+  const role = String(userRole ?? "")
+
+  if (role === ONBOARDING_PROPERTY_SEEKER_ROLE_ID) {
+    return "seeker"
+  }
+
+  if (role === ONBOARDING_LANDLORD_ROLE_ID) {
+    return "landlord"
+  }
+
+  if (role === ONBOARDING_AGENT_ROLE_ID) {
+    return "agent"
+  }
+
+  return null
+}
+
+function defaultPlanIdForAudience(audience: OnboardingAudience) {
+  if (audience === "landlord") {
+    return DEFAULT_LANDLORD_PLAN_ID
+  }
+
+  if (audience === "agent") {
+    return DEFAULT_AGENT_PLAN_ID
+  }
+
+  return DEFAULT_SEEKER_PLAN_ID
 }
 
 function toOnboardingSubscriber(
@@ -78,9 +132,9 @@ function toOnboardingSubscriber(
   }
 }
 
-function stepLabel(step: OnboardingStep, isSeeker: boolean) {
+function stepLabel(step: OnboardingStep) {
   if (step === "account") {
-    return "Étape 1 — Créer votre compte"
+    return "Étape 1 sur 3 — Créer votre compte"
   }
 
   if (step === "subscription") {
@@ -91,23 +145,23 @@ function stepLabel(step: OnboardingStep, isSeeker: boolean) {
     return "Étape 3 sur 3 — Payer l'abonnement"
   }
 
-  return isSeeker
-    ? "Étape 3 sur 3 — Confirmation"
-    : "Étape 2 sur 2 — Confirmation"
+  return "Étape 3 sur 3 — Confirmation"
 }
 
 function OnboardingFeedback({
   feedback,
   selectedPlanId,
+  audience,
   onAction,
   onChangePlan,
 }: {
   feedback: OnboardingFeedbackState
   selectedPlanId: string
+  audience: OnboardingAudience | null
   onAction: () => void
   onChangePlan: () => void
 }) {
-  const copy = feedbackCopy(feedback, selectedPlanId)
+  const copy = feedbackCopy(feedback, selectedPlanId, audience)
 
   return (
     <Container className="max-w-xl">
@@ -132,6 +186,7 @@ function OnboardingFeedback({
 function feedbackCopy(
   feedback: OnboardingFeedbackState,
   selectedPlanId: string,
+  audience: OnboardingAudience | null,
 ) {
   if (feedback.status === "failure") {
     return {
@@ -143,12 +198,68 @@ function feedbackCopy(
     }
   }
 
-  if (feedback.source === "subscription" && selectedPlanId === DEFAULT_PLAN_ID) {
-    return {
-      title: "Votre compte est prêt",
-      subtitle:
-        "Vous restez sur la formule Standard. Vous pouvez dès maintenant rechercher un logement ou une parcelle sur ImmoAsk.",
-      actionLabel: "Terminer",
+  if (feedback.source === "subscription") {
+    if (audience === "seeker" && selectedPlanId === DEFAULT_SEEKER_PLAN_ID) {
+      return {
+        title: "Votre compte est prêt",
+        subtitle:
+          "Vous êtes sur la formule Standard. Vous pouvez dès maintenant rechercher un logement ou une parcelle sur ImmoAsk.",
+        actionLabel: "Terminer",
+      }
+    }
+
+    if (audience === "landlord" && selectedPlanId === DEFAULT_LANDLORD_PLAN_ID) {
+      return {
+        title: "Votre compte propriétaire est prêt",
+        subtitle:
+          "Vous êtes sur la formule Essentiel. Publiez votre bien et commencez à trouver votre prochain locataire.",
+        actionLabel: "Terminer",
+      }
+    }
+
+    if (audience === "landlord" && selectedPlanId === "serenite") {
+      return {
+        title: "Formule Sérénité sélectionnée",
+        subtitle:
+          "Votre compte est créé. Contactez ImmoAsk pour activer Sérénité et digitaliser la gestion de vos biens.",
+        actionLabel: "Contacter ImmoAsk",
+      }
+    }
+
+    if (audience === "landlord" && selectedPlanId === "elite") {
+      return {
+        title: "Formule Elite sélectionnée",
+        subtitle:
+          "Votre compte est créé. Contactez ImmoAsk pour une gestion immobilière entièrement déléguée.",
+        actionLabel: "Contacter ImmoAsk",
+      }
+    }
+
+    if (audience === "agent" && selectedPlanId === DEFAULT_AGENT_PLAN_ID) {
+      return {
+        title: "Votre compte professionnel est prêt",
+        subtitle:
+          "Vous êtes sur la formule JUST. Publiez vos biens gratuitement et développez votre visibilité sur ImmoAsk.",
+        actionLabel: "Terminer",
+      }
+    }
+
+    if (audience === "agent" && selectedPlanId === "senior") {
+      return {
+        title: "Formule SENIOR sélectionnée",
+        subtitle:
+          "Votre compte est créé. Contactez ImmoAsk pour activer SENIOR et développer votre acquisition de clients.",
+        actionLabel: "Contacter ImmoAsk",
+      }
+    }
+
+    if (audience === "agent" && selectedPlanId === "business") {
+      return {
+        title: "Formule BUSINESS sélectionnée",
+        subtitle:
+          "Votre compte est créé. Contactez ImmoAsk pour digitaliser votre agence avec un environnement dédié et un agent IA.",
+        actionLabel: "Contacter ImmoAsk",
+      }
     }
   }
 
@@ -180,17 +291,20 @@ export default function OnboardingProcess({
   const [step, setStep] = useState<OnboardingStep>("account")
   const [userRole, setUserRole] = useState("")
   const [account, setAccount] = useState<OnboardingAccount | null>(null)
-  const [selectedPlanId, setSelectedPlanId] = useState(DEFAULT_PLAN_ID)
+  const [selectedPlanId, setSelectedPlanId] = useState(DEFAULT_SEEKER_PLAN_ID)
   const [feedback, setFeedback] = useState<OnboardingFeedbackState | null>(null)
   const [registered, setRegistered] = useState(false)
   const [registering, setRegistering] = useState(false)
   const [registerError, setRegisterError] = useState<string | null>(null)
   const advancingPlanRef = useRef(false)
 
-  const isSeeker = isPropertySeekerRole(userRole || account?.userRole)
+  const audience = resolveAudience(userRole || account?.userRole)
   const paidPlan = useMemo(
-    () => buildPayPropertySeekersSubscriptionPlan(selectedPlanId),
-    [selectedPlanId],
+    () =>
+      audience === "seeker"
+        ? buildPayPropertySeekersSubscriptionPlan(selectedPlanId)
+        : null,
+    [audience, selectedPlanId],
   )
   const subscriber =
     toPayVisitFeeVisitor(session) ?? toOnboardingSubscriber(account)
@@ -215,6 +329,7 @@ export default function OnboardingProcess({
         saveAccountSession(nextSession)
       }
 
+      sendOnboardingWelcomeEmail(input)
       setRegistered(true)
       return true
     } catch (error) {
@@ -234,29 +349,24 @@ export default function OnboardingProcess({
       ...input,
       userRole: String(input.userRole),
     }
+    const nextAudience = resolveAudience(nextAccount.userRole)
 
     setUserRole(String(nextAccount.userRole))
     setAccount(nextAccount)
-    setSelectedPlanId(DEFAULT_PLAN_ID)
     setFeedback(null)
     setRegisterError(null)
-    sendOnboardingWelcomeEmail(nextAccount)
+    setRegistered(false)
+    advancingPlanRef.current = false
 
-    if (isPropertySeekerRole(nextAccount.userRole)) {
-      setStep("subscription")
+    if (!nextAudience) {
+      setRegisterError(
+        "Sélectionnez un profil valide pour continuer vers les formules.",
+      )
       return
     }
 
-    void (async () => {
-      const created = await registerAccount(nextAccount)
-
-      if (!created) {
-        return
-      }
-
-      setFeedback({ status: "success", source: "account" })
-      setStep("feedback")
-    })()
+    setSelectedPlanId(defaultPlanIdForAudience(nextAudience))
+    setStep("subscription")
   }
 
   async function handleSelectPlan(planId: string) {
@@ -264,13 +374,14 @@ export default function OnboardingProcess({
       return
     }
 
-    if (!account) {
+    if (!account || !audience) {
       setStep("account")
       return
     }
 
     advancingPlanRef.current = true
     setSelectedPlanId(planId)
+    setRegisterError(null)
 
     const created = await registerAccount(account)
 
@@ -279,18 +390,35 @@ export default function OnboardingProcess({
       return
     }
 
-    if (planId === DEFAULT_PLAN_ID) {
+    if (FREE_PLAN_IDS.has(planId) || CONTACT_PLAN_IDS.has(planId)) {
       setFeedback({ status: "success", source: "subscription" })
       setStep("feedback")
       return
     }
 
-    setStep("payment")
+    if (
+      audience === "seeker" &&
+      buildPayPropertySeekersSubscriptionPlan(planId)
+    ) {
+      setStep("payment")
+      return
+    }
+
+    setFeedback({ status: "success", source: "subscription" })
+    setStep("feedback")
   }
 
   function handleFeedbackAction() {
     if (feedback?.status === "failure") {
       setStep("payment")
+      return
+    }
+
+    if (
+      feedback?.source === "subscription" &&
+      CONTACT_PLAN_IDS.has(selectedPlanId)
+    ) {
+      router.push("/contact")
       return
     }
 
@@ -301,14 +429,17 @@ export default function OnboardingProcess({
     <div className={cn("bg-surface py-6 sm:py-10", className)}>
       <Container>
         <p className="mb-4 text-center text-sm font-medium text-muted">
-          {stepLabel(step, isSeeker)}
+          {stepLabel(step)}
         </p>
       </Container>
 
       {step === "account" ? (
         <Container>
           {registerError ? (
-            <p role="alert" className="mb-4 rounded-xl bg-danger-soft px-4 py-3 text-sm text-danger">
+            <p
+              role="alert"
+              className="mb-4 rounded-xl bg-danger-soft px-4 py-3 text-sm text-danger"
+            >
               {registerError}
             </p>
           ) : null}
@@ -316,7 +447,7 @@ export default function OnboardingProcess({
             defaultCountry={defaultCountry}
             loginHref={loginHref}
             backHref={backHref}
-            submitLabel={registering ? "Création du compte..." : "Continuer"}
+            submitLabel="Continuer"
             redirectOnSuccess={false}
             registerOnSubmit={false}
             onUserRoleChange={setUserRole}
@@ -329,24 +460,62 @@ export default function OnboardingProcess({
         <>
           {registerError ? (
             <Container className="max-w-2xl pb-4">
-              <p role="alert" className="rounded-xl bg-danger-soft px-4 py-3 text-sm text-danger">
+              <p
+                role="alert"
+                className="rounded-xl bg-danger-soft px-4 py-3 text-sm text-danger"
+              >
                 {registerError}
               </p>
             </Container>
           ) : null}
-          <PropertySeekersSubscription
-            selectedColumnId={selectedPlanId}
-            onSelectColumn={(planId) => {
-              void handleSelectPlan(planId)
-            }}
-            footer={
-              registering ? (
-                <p className="text-sm font-medium text-muted">
-                  Création du compte...
-                </p>
-              ) : undefined
-            }
-          />
+
+          {audience === "seeker" ? (
+            <PropertySeekersSubscription
+              selectedColumnId={selectedPlanId}
+              onSelectColumn={(planId) => {
+                void handleSelectPlan(planId)
+              }}
+              footer={
+                registering ? (
+                  <p className="text-sm font-medium text-muted">
+                    Création du compte...
+                  </p>
+                ) : undefined
+              }
+            />
+          ) : null}
+
+          {audience === "landlord" ? (
+            <LandlordSubscription
+              selectedColumnId={selectedPlanId}
+              onSelectColumn={(planId) => {
+                void handleSelectPlan(planId)
+              }}
+              footer={
+                registering ? (
+                  <p className="text-sm font-medium text-muted">
+                    Création du compte...
+                  </p>
+                ) : undefined
+              }
+            />
+          ) : null}
+
+          {audience === "agent" ? (
+            <AgentMarketPlaceSubscription
+              selectedColumnId={selectedPlanId}
+              onSelectColumn={(planId) => {
+                void handleSelectPlan(planId)
+              }}
+              footer={
+                registering ? (
+                  <p className="text-sm font-medium text-muted">
+                    Création du compte...
+                  </p>
+                ) : undefined
+              }
+            />
+          ) : null}
         </>
       ) : null}
 
@@ -376,6 +545,7 @@ export default function OnboardingProcess({
         <OnboardingFeedback
           feedback={feedback}
           selectedPlanId={selectedPlanId}
+          audience={audience}
           onAction={handleFeedbackAction}
           onChangePlan={() => {
             advancingPlanRef.current = false

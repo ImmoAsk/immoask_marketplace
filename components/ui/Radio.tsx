@@ -42,10 +42,12 @@ export default function Radio({
 export function RadioGroup({
   legend,
   className,
+  optionsClassName,
   children,
   ...props
 }: ComponentPropsWithoutRef<"fieldset"> & {
   legend?: ReactNode
+  optionsClassName?: string
 }) {
   return (
     <fieldset className={cn("min-w-0", className)} {...props}>
@@ -54,7 +56,9 @@ export function RadioGroup({
           {legend}
         </legend>
       ) : null}
-      <div className="flex flex-col gap-2">{children}</div>
+      <div className={cn("flex flex-col gap-2", optionsClassName)}>
+        {children}
+      </div>
     </fieldset>
   )
 }

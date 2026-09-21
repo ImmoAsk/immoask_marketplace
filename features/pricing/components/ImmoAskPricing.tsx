@@ -11,6 +11,7 @@ import type {
 } from "@/features/pricing/types"
 import { isImmoAskPricingCustomerType } from "@/features/pricing/types"
 import LandlordSubscription from "@/features/subscriptions/components/LandlordSubscription"
+import AgentMarketPlaceSubscription from "@/features/subscriptions/components/AgentMarketPlaceSubscription"
 import PropertySeekersSubscription from "@/features/subscriptions/components/PropertySeekersSubscription"
 
 import { buildImmoAskPricing } from "./buildImmoAskPricing"
@@ -60,8 +61,11 @@ export default function ImmoAskPricing({
           </p>
         </header>
 
-        <div className="mx-auto mt-8 max-w-xl rounded-2xl border border-border bg-white p-5 shadow-card sm:mt-10 sm:p-6">
-          <RadioGroup legend="Quel est votre profil ?">
+        <div className="mx-auto mt-8 max-w-5xl rounded-2xl border border-border bg-white p-5 shadow-card sm:mt-10 sm:p-6">
+          <RadioGroup
+            legend="Quel est votre profil ?"
+            optionsClassName="!flex-row items-stretch gap-3"
+          >
             {options.map((option) => {
               const inputId = `${formId}-${option.id}`
 
@@ -89,7 +93,7 @@ export default function ImmoAskPricing({
                       ) : null}
                     </span>
                   }
-                  className="w-full rounded-xl border border-transparent px-3 py-2.5 has-[:checked]:border-primary/30 has-[:checked]:bg-primary-soft/40"
+                  className="w-full flex-1 rounded-xl border border-transparent px-3 py-2.5 has-[:checked]:border-primary/30 has-[:checked]:bg-primary-soft/40 sm:min-w-0"
                 />
               )
             })}
@@ -103,6 +107,10 @@ export default function ImmoAskPricing({
 
           {customerType === "proprietaires" ? (
             <LandlordSubscription embedded />
+          ) : null}
+
+          {customerType === "professionnels" ? (
+            <AgentMarketPlaceSubscription embedded />
           ) : null}
         </div>
 
