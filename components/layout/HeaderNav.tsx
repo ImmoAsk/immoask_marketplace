@@ -4,7 +4,7 @@ import Link from "next/link"
 
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics"
 import Separator from "@/components/ui/Separator"
-import { AUTH_SIGNIN_PATH, AUTH_SIGNUP_PATH } from "@/lib/routing/auth"
+import { AUTH_SIGNIN_PATH, AUTH_SIGNUP_PATH, MOBILE_APP_LINK } from "@/lib/routing/auth"
 import AccountAuthenticated from "@/features/account/components/AccountAuthenticated"
 
 export const headerNavLinks = [
@@ -14,6 +14,18 @@ export const headerNavLinks = [
 export const headerAccountLinks = [
   { href: AUTH_SIGNIN_PATH, label: "Se connecter" },
   { href: AUTH_SIGNUP_PATH, label: "Créer un compte" },
+] as const
+
+export const headerAuthenticatedLinks = [
+  {
+    href: "/tarifications",
+    label: "Mettre à jour votre abonnement",
+  },
+  {
+    href: MOBILE_APP_LINK,
+    label: "Continuer sur l'appli mobile",
+    external: true,
+  },
 ] as const
 
 export default function HeaderNav() {

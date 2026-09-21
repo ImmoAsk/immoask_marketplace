@@ -5,6 +5,7 @@ import Link from "next/link"
 
 import {
   headerAccountLinks,
+  headerAuthenticatedLinks,
   headerNavLinks,
 } from "@/components/layout/HeaderNav"
 import { accountApi } from "@/lib/api/accounts"
@@ -104,13 +105,28 @@ export default function MobileMenu() {
               </Link>
             ))}
             {session ? (
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="block w-full rounded-xl px-3 py-2.5 text-left text-sm font-medium text-navy hover:bg-primary-soft hover:text-primary"
-              >
-                Se déconnecter
-              </button>
+              <>
+                {headerAuthenticatedLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    {...("external" in link && link.external
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
+                    onClick={() => setOpen(false)}
+                    className="block rounded-xl px-3 py-2.5 text-sm font-medium text-navy hover:bg-primary-soft hover:text-primary"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="block w-full rounded-xl px-3 py-2.5 text-left text-sm font-medium text-navy hover:bg-primary-soft hover:text-primary"
+                >
+                  Se déconnecter
+                </button>
+              </>
             ) : null}
           </nav>
         </>

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useEffect, useId, useRef, useState } from "react"
 
 import Avatar from "@/components/ui/Avatar"
+import { headerAuthenticatedLinks } from "@/components/layout/HeaderNav"
 import { accountApi } from "@/lib/api/accounts"
 import { cn } from "@/lib/cn"
 import { AUTH_SIGNIN_PATH } from "@/lib/routing/auth"
@@ -172,6 +173,23 @@ export default function AccountAuthenticated({
               ) : null}
             </div>
           </div>
+
+          <div className="my-1 border-t border-border" />
+
+          {headerAuthenticatedLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              role="menuitem"
+              {...("external" in link && link.external
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {})}
+              onClick={() => setOpen(false)}
+              className="flex w-full items-center rounded-lg px-3 py-2.5 text-left text-sm font-medium text-navy transition-colors hover:bg-primary-soft hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              {link.label}
+            </Link>
+          ))}
 
           <button
             type="button"
