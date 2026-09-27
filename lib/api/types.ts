@@ -19,9 +19,21 @@ export type GetDistrictsVariables = {
   townId: string
 }
 
+export type PlaceToVisit = {
+  id: string
+  placeName: string
+  placeUrl: string
+  paysId: number
+}
+
+export type GetPlaceToVisitsVariables = {
+  paysId?: number
+}
+
 export interface LocationApi {
   getCities(countryCallingCode: number | string): Promise<LocationRecord[]>
   getDistricts(townId: number | string): Promise<LocationRecord[]>
+  getPlaceToVisits(paysId?: number): Promise<PlaceToVisit[]>
 }
 
 export interface PropertyApi {

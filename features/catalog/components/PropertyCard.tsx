@@ -145,24 +145,31 @@ export default function PropertyCard({ href, property }: PropertyCardProps) {
     <Link
       href={href}
       aria-label={title}
-      className="block h-full text-inherit no-underline"
+      className="group block h-full text-inherit no-underline"
     >
       <Card
         as="article"
         interactive
-        className="h-full overflow-hidden rounded-3xl border-transparent shadow-[0_10px_36px_rgb(11_31_58_/_0.08)] hover:border-transparent"
+        className="h-full overflow-hidden rounded-3xl border-transparent shadow-[0_10px_36px_rgb(11_31_58_/_0.08)] transition duration-300 ease-out hover:border-transparent group-hover:-translate-y-1 group-hover:shadow-[0_18px_42px_rgb(0_150_214_/_0.18)] motion-reduce:transition-none motion-reduce:group-hover:translate-y-0"
       >
-        <div className="relative">
-          {image ? (
-            <PropertyImage src={image} alt={title} />
-          ) : (
-            <div
-              className="flex aspect-[16/10] items-center justify-center bg-primary-soft text-sm font-medium text-primary"
-              aria-hidden="true"
-            >
-              ImmoAsk
-            </div>
-          )}
+        <div className="relative overflow-hidden">
+          <div className="transition duration-500 ease-out group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100">
+            {image ? (
+              <PropertyImage src={image} alt={title} />
+            ) : (
+              <div
+                className="flex aspect-[16/10] items-center justify-center bg-primary-soft text-sm font-medium text-primary"
+                aria-hidden="true"
+              >
+                ImmoAsk
+              </div>
+            )}
+          </div>
+
+          <div
+            className="pointer-events-none absolute inset-0 bg-primary/0 transition duration-300 group-hover:bg-primary/10 motion-reduce:transition-none"
+            aria-hidden="true"
+          />
 
           {property.badge ? (
             <span className="absolute left-4 top-4 rounded-md bg-primary px-2.5 py-1 text-xs font-semibold text-white">

@@ -197,7 +197,7 @@ export default function SearchBar({
       method="get"
       onSubmit={handleSubmit}
       className={cn(
-        "flex w-3/5 flex-col gap-3 rounded-[28px] border border-primary/10 bg-hero-search p-3 shadow-[0_10px_40px_rgb(26_160_224_/_0.12)]",
+        "flex w-full flex-col gap-3 rounded-[28px] border border-primary/10 bg-hero-search p-3 shadow-[0_10px_40px_rgb(26_160_224_/_0.12)]",
         "sm:flex-row sm:items-center sm:rounded-full sm:py-2 sm:pl-5 sm:pr-2",
         className,
       )}

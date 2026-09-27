@@ -51,6 +51,8 @@
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
   --animate-marquee: marquee 40s linear infinite;
+  --animate-place-scroll-up: place-scroll-up 36s linear infinite;
+  --animate-place-scroll-down: place-scroll-down 42s linear infinite;
 }
 
 @keyframes marquee {
@@ -60,6 +62,26 @@
 
   to {
     transform: translateX(-50%);
+  }
+}
+
+@keyframes place-scroll-up {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes place-scroll-down {
+  from {
+    transform: translateY(-50%);
+  }
+
+  to {
+    transform: translateY(0);
   }
 }
 
@@ -96,35 +118,58 @@
 @media (prefers-reduced-motion: reduce) {
   .listing-reveal,
   .listing-reveal-delay,
-  .listing-illustration {
+  .listing-illustration,
+  .place-scroll-up,
+  .place-scroll-down {
     animation: none;
     transition: none;
   }
 }
 
 .hero-wash {
-  background-color: #ffffff;
-  background-image:
-    radial-gradient(
-      ellipse 48% 95% at 0% 0%,
-      color-mix(in srgb, #1aa0e0 42%, white) 0%,
-      transparent 62%
-    ),
-    radial-gradient(
-      ellipse 42% 90% at 100% 0%,
-      color-mix(in srgb, #0096d6 26%, white) 0%,
-      transparent 58%
-    ),
-    radial-gradient(
-      ellipse 36% 70% at 100% 100%,
-      color-mix(in srgb, #1aa0e0 18%, #f5f8fb) 0%,
-      transparent 60%
-    ),
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: #f4f9fc;
+}
+
+.hero-wash::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: url("/images/hero-pattern.jpg");
+  background-position: center top;
+  background-repeat: repeat;
+  background-size: 520px auto;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.hero-wash::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
     linear-gradient(
-      180deg,
-      color-mix(in srgb, #1aa0e0 4%, white) 0%,
-      #ffffff 100%
+      90deg,
+      rgb(255 255 255 / 0.94) 0%,
+      rgb(255 255 255 / 0.9) 38%,
+      rgb(244 249 252 / 0.72) 68%,
+      rgb(244 249 252 / 0.5) 100%
+    ),
+    radial-gradient(
+      ellipse 42% 80% at 0% 0%,
+      rgb(255 255 255 / 0.55) 0%,
+      transparent 70%
     );
+}
+
+.hero-wash > * {
+  position: relative;
+  z-index: 1;
 }
 
 html {

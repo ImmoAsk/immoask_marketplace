@@ -85,6 +85,24 @@ function ChartIcon() {
   )
 }
 
+export function getWelcomeSearchSuggestions(countryCode: string): string[] {
+  if (countryCode === "tg") {
+    return [
+      "Villa Adidogomé",
+      "Appartement meublé Nyékonakpoè",
+      "Terrain titré Baguida",
+      "Lomé II Cité OUA",
+    ]
+  }
+
+  return [
+    "Villa à louer",
+    "Appartement meublé",
+    "Terrain titré",
+    "Maison familiale",
+  ]
+}
+
 export function getWelcomeServices(countryCode: string): WelcomeService[] {
   return [
     {
