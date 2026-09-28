@@ -1,15 +1,30 @@
 "use client"
 
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics"
+import { cn } from "@/lib/cn"
 import Separator from "@/components/ui/Separator"
-import { AUTH_SIGNIN_PATH, AUTH_SIGNUP_PATH, MOBILE_APP_LINK } from "@/lib/routing/auth"
+import { buildAnnuairePath } from "@/features/annuaire/components/buildAnnuaireMetadata"
 import AccountAuthenticated from "@/features/account/components/AccountAuthenticated"
+import { AUTH_SIGNIN_PATH, AUTH_SIGNUP_PATH, MOBILE_APP_LINK } from "@/lib/routing/auth"
+import { getCountry } from "@/lib/routing/countries"
 
-export const headerNavLinks = [
-  { href: "/tarifications", label: "Tarifications" },
-] as const
+export function countryCodeFromPathname(pathname: string) {
+  const segment = pathname.split("/").filter(Boolean)[0] ?? ""
+  return getCountry(segment)?.code ?? "tg"
+}
+
+export function getHeaderNavLinks(pathname: string) {
+  return [
+    {
+      href: buildAnnuairePath(countryCodeFromPathname(pathname)),
+      label: "Annuaire",
+    },
+    { href: "/tarifications", label: "Tarifs" },
+  ]
+}
 
 export const headerAccountLinks = [
   { href: AUTH_SIGNIN_PATH, label: "Se connecter" },
@@ -28,22 +43,53 @@ export const headerAuthenticatedLinks = [
   },
 ] as const
 
+export function HeaderAnnuaireLink({ className }: { className?: string }) {
+  const pathname = usePathname()
+  const href = buildAnnuairePath(countryCodeFromPathname(pathname))
+  const active = pathname === href || pathname.startsWith(`${href}/`)
+
+  return (
+    <Link
+      href={href}
+      aria-current={active ? "page" : undefined}
+      className={cn(
+        "text-sm font-medium transition-colors hover:text-primary",
+        active ? "text-primary" : "text-navy",
+        className,
+      )}
+    >
+      Annuaire
+    </Link>
+  )
+}
+
 export default function HeaderNav() {
+  const pathname = usePathname()
+  const headerNavLinks = getHeaderNavLinks(pathname)
+
   return (
     <nav
       className="hidden items-center gap-6 lg:flex"
       aria-label="Navigation principale"
     >
       <GoogleAnalytics />
-      {headerNavLinks.map((link) => (
-        <Link
-          key={link.href}
-          href={link.href}
-          className="text-sm font-medium text-navy transition-colors hover:text-primary"
-        >
-          {link.label}
-        </Link>
-      ))}
+      {headerNavLinks.map((link) => {
+        const active = pathname === link.href || pathname.startsWith(`${link.href}/`)
+
+        return (
+          <Link
+            key={link.href}
+            href={link.href}
+            aria-current={active ? "page" : undefined}
+            className={cn(
+              "text-sm font-medium transition-colors hover:text-primary",
+              active ? "text-primary" : "text-navy",
+            )}
+          >
+            {link.label}
+          </Link>
+        )
+      })}
 
       <AccountAuthenticated variant="nav">
         <div className="flex items-center gap-3">

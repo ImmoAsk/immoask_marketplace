@@ -2,11 +2,12 @@
 
 import { useEffect, useId, useState } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 import {
+  getHeaderNavLinks,
   headerAccountLinks,
   headerAuthenticatedLinks,
-  headerNavLinks,
 } from "@/components/layout/HeaderNav"
 import { accountApi } from "@/lib/api/accounts"
 import { AUTH_SIGNIN_PATH } from "@/lib/routing/auth"
@@ -21,7 +22,9 @@ const listingLink = {
 export default function MobileMenu() {
   const [open, setOpen] = useState(false)
   const menuId = useId()
+  const pathname = usePathname()
   const { session } = useAccountSession()
+  const headerNavLinks = getHeaderNavLinks(pathname)
 
   useEffect(() => {
     if (!open) {

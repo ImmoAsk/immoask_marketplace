@@ -12,7 +12,7 @@ const SubscriptionGateContext = createContext(false)
 export default function PropertyDetailSubscriptionGate({
   children,
   ctaLabel = "Payer un abonnement pour voir tout",
-  ctaHref = "/abonnements/chercheurs",
+  ctaHref = "/tarifications",
   className,
 }: {
   children?: ReactNode

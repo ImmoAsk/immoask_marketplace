@@ -2,7 +2,7 @@ import Link from "next/link"
 import type { ReactNode } from "react"
 
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics"
-import HeaderNav from "@/components/layout/HeaderNav"
+import HeaderNav, { HeaderAnnuaireLink } from "@/components/layout/HeaderNav"
 import MobileMenu from "@/components/layout/MobileMenu"
 import Button from "@/components/ui/Button"
 import Container from "@/components/ui/Container"
@@ -58,6 +58,7 @@ export default function Header() {
         </Link>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <HeaderAnnuaireLink className="lg:hidden" />
           <HeaderNav />
 
           <span className="hidden md:inline-flex">
