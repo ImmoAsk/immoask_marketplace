@@ -1,8 +1,11 @@
-import Link from "next/link"
+"use client"
+
+import { useState } from "react"
 
 import Avatar from "@/components/ui/Avatar"
-import { cn } from "@/lib/cn"
+import RealEstateAgentInquiryModal from "@/features/realestate_agent_card/components/RealEstateAgentInquiryModal"
 import type { RealEstateAgentCardProps } from "@/features/realestate_agent_card/types"
+import { cn } from "@/lib/cn"
 
 function PinIcon() {
   return (
@@ -23,9 +26,9 @@ export default function RealEstateAgentCard({
   role = "Conseiller immobilier",
   location,
   photo,
-  href,
   className,
 }: RealEstateAgentCardProps) {
+  const [open, setOpen] = useState(false)
   const classNames = cn(
     "flex w-64 shrink-0 items-center gap-3 rounded-[22px] bg-white px-4 py-3.5 shadow-[0_8px_28px_rgb(11_31_58_/_0.08)]",
     "transition-shadow hover:shadow-[0_10px_32px_rgb(11_31_58_/_0.12)]",
@@ -54,15 +57,19 @@ export default function RealEstateAgentCard({
     </>
   )
 
-  if (href) {
-    return (
-      <Link href={href} className={classNames}>
+  return (
+    <>
+      <button type="button" onClick={() => setOpen(true)} className={classNames}>
         {content}
-      </Link>
-    )
-  }
+      </button>
 
-  return <div className={classNames}>{content}</div>
+      <RealEstateAgentInquiryModal
+        open={open}
+        agentName={name}
+        onClose={() => setOpen(false)}
+      />
+    </>
+  )
 }
 
 export { RealEstateAgentCard }

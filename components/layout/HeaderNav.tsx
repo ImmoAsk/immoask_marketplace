@@ -20,7 +20,7 @@ export function getHeaderNavLinks(pathname: string) {
   return [
     {
       href: buildAnnuairePath(countryCodeFromPathname(pathname)),
-      label: "Annuaire",
+      label: "Trouver un agent immobilier",
     },
     { href: "/tarifications", label: "Tarifs" },
   ]

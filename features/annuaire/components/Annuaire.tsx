@@ -76,19 +76,26 @@ export default function Annuaire({
           <AnnuaireDirectory countryCode={countryCode} agents={agents} />
         </div>
 
-        <aside className="mt-10 max-w-md rounded-2xl border border-border bg-white px-5 py-4 shadow-card">
-          <p className="text-sm font-semibold text-navy">
-            Créer votre compte annuaire et explorer votre agence
-          </p>
-          <Link
-            href={AUTH_SIGNUP_PATH}
-            className="mt-3 inline-flex text-sm font-semibold text-primary hover:text-primary-hover"
-          >
-            Créer un compte
-            <span aria-hidden="true" className="ml-1">
-              →
-            </span>
-          </Link>
+        <aside className="mt-10 w-full rounded-2xl bg-primary px-6 py-8 text-white sm:px-8 sm:py-10">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-3xl">
+              <h2 className="text-xl font-bold tracking-tight sm:text-2xl">
+                Créer un compte ImmoAsk : Professionnel immobilier, propriétaire de biens immobiliers
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-white/90 sm:text-base">
+                Rejoignez l&apos;annuaire au {countryName}. Présentez votre activité ou vos biens, et laissez les locataires et les acquéreurs vous trouver.
+              </p>
+            </div>
+            <Link
+              href={AUTH_SIGNUP_PATH}
+              className="inline-flex shrink-0 items-center justify-center rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-primary hover:bg-primary-soft"
+            >
+              Créer un compte
+              <span aria-hidden="true" className="ml-1">
+                →
+              </span>
+            </Link>
+          </div>
         </aside>
       </Container>
     </div>
