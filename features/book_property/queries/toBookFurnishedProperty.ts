@@ -42,6 +42,9 @@ export function toBookFurnishedProperty(
     offerLabel: resolveSuperCategorieLabel(property.superCategory),
     badge: property.badges[0] ?? null,
     images: property.images,
+    media:
+      property.media ??
+      property.images.map((src) => ({ src, kind: "image" as const })),
     roleName: property.agent?.roleName ?? null,
     proprietaireId: property.agent?.id ?? null,
   }
