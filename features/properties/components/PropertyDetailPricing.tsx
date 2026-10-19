@@ -1,4 +1,3 @@
-import Badge from "@/components/ui/Badge"
 import Separator from "@/components/ui/Separator"
 import { cn } from "@/lib/cn"
 import type {
@@ -52,7 +51,6 @@ export default function PropertyDetailPricing({
   periodLabel,
   amountLabel,
   unitLabel,
-  certifiedLabel,
   note,
   extras,
   className,
@@ -69,21 +67,15 @@ export default function PropertyDetailPricing({
         {periodLabel}
       </p>
 
-      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2">
-        <p className="text-3xl font-bold tracking-tight text-navy sm:text-[2rem]">
-          {amountLabel}
-          {unitLabel ? (
-            <span className="ml-2 text-base font-semibold text-navy">
-              {" "}
-              {unitLabel}
-            </span>
-          ) : null}
-        </p>
-
-        {certifiedLabel ? (
-          <Badge className="rounded-md px-2.5 py-1">{certifiedLabel}</Badge>
+      <p className="mt-2 text-3xl font-bold tracking-tight text-navy sm:text-[2rem]">
+        {amountLabel}
+        {unitLabel ? (
+          <span className="ml-2 text-base font-semibold text-navy">
+            {" "}
+            {unitLabel}
+          </span>
         ) : null}
-      </div>
+      </p>
 
       {note ? (
         <p className="mt-2 text-sm text-muted">{note}</p>

@@ -148,14 +148,18 @@ function seeMoreOverlayClass(index: number, secondaryCount: number) {
   return "hidden"
 }
 
-function GalleryImage({
+function GalleryMedia({
   src,
   alt,
+  kind = "image",
   className,
+  controls = false,
 }: {
   src: string
   alt: string
+  kind?: PropertyGalleryImage["kind"]
   className?: string
+  controls?: boolean
 }) {
   const [failed, setFailed] = useState(false)
 
@@ -170,6 +174,27 @@ function GalleryImage({
       >
         ImmoAsk
       </div>
+    )
+  }
+
+  if (kind === "video") {
+    return (
+      <video
+        src={src}
+        className={cn(
+          controls ? "max-h-full max-w-full object-contain" : "size-full object-cover",
+          className,
+        )}
+        muted={!controls}
+        playsInline
+        loop={!controls}
+        autoPlay={!controls}
+        controls={controls}
+        preload="metadata"
+        aria-label={alt}
+        onError={() => setFailed(true)}
+        onClick={controls ? (event) => event.stopPropagation() : undefined}
+      />
     )
   }
 
@@ -207,7 +232,12 @@ function GalleryTile({
         className,
       )}
     >
-      <GalleryImage src={image.src} alt="" className="absolute inset-0" />
+      <GalleryMedia
+        src={image.src}
+        alt=""
+        kind={image.kind}
+        className="absolute inset-0"
+      />
       {children}
     </button>
   )
@@ -233,7 +263,12 @@ export default function PropertyDetailGallery({
 
   const mainImage = images[0]
   const secondaryImages = images.slice(1, 1 + PREVIEW_COUNT)
-  const seeMoreLabel = viewAllLabel ?? `Voir les ${count} photos HD & 360°`
+  const hasVideo = images.some((image) => image.kind === "video")
+  const seeMoreLabel =
+    viewAllLabel ??
+    (hasVideo
+      ? `Voir les ${count} médias`
+      : `Voir les ${count} photos HD & 360°`)
 
   useEffect(() => {
     setCanUsePortal(true)
@@ -334,11 +369,15 @@ export default function PropertyDetailGallery({
               </button>
             ) : null}
 
-            <img
-              src={images[activeIndex]?.src}
-              alt={images[activeIndex]?.alt ?? title ?? "Photo du bien"}
-              className="max-h-full max-w-full rounded-xl object-contain"
-            />
+            <div className="flex max-h-full max-w-full items-center justify-center">
+              <GalleryMedia
+                src={images[activeIndex]?.src ?? ""}
+                alt={images[activeIndex]?.alt ?? title ?? "Média du bien"}
+                kind={images[activeIndex]?.kind}
+                controls={images[activeIndex]?.kind === "video"}
+                className="max-h-[min(80vh,100%)] max-w-full rounded-xl object-contain"
+              />
+            </div>
 
             {images.length > 1 ? (
               <button

@@ -1,14 +1,6 @@
+import { resolveSuperCategorieLabel } from "@/features/catalog/resolveSuperCategorieLabel"
 import type { Property } from "@/features/properties/types"
 import type { VisitPropertyTourProperty } from "@/features/visit_property_tour/types"
-
-const OFFER_LABELS: Record<string, string> = {
-  vendre: "ACQUISITION",
-  vente: "ACQUISITION",
-  louer: "LOCATION",
-  location: "LOCATION",
-  bail: "BAIL",
-  investir: "INVESTISSEMENT",
-}
 
 export function toVisitPropertyTourProperty(
   property: Property,
@@ -47,8 +39,7 @@ export function toVisitPropertyTourProperty(
     parking: property.parking,
     area: property.area,
     propertyType: property.propertyType,
-    offerLabel:
-      OFFER_LABELS[property.offreName?.trim().toLowerCase() ?? ""] ?? "",
+    offerLabel: resolveSuperCategorieLabel(property.superCategory),
     badge: property.badges[0] ?? null,
     images: property.images,
     visitFee: property.visitFee,

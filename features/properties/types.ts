@@ -2,6 +2,7 @@ import type {
   BookFurnishedPropertyProperty,
   BookFurnishedPropertyValues,
 } from "@/features/book_property/types"
+import type { PropertyMedia } from "@/features/catalog/resolvePropertyMedia"
 import type { PropertyInquiryFormInput } from "@/features/inquiry/types"
 import type { PayNowResult } from "@/features/payment/types"
 import type {
@@ -31,6 +32,7 @@ export interface Property {
   area: number | null
   landArea?: number | null
   images: string[]
+  media?: PropertyMedia[]
   badges: string[]
   countryCode?: string
   offreId?: number | null
@@ -97,6 +99,7 @@ export type PropertyGalleryImage = {
   src: string
   alt: string
   label?: string
+  kind?: "image" | "video"
 }
 
 export type PropertyGalleryBadgeVariant = "verified" | "exclusive" | "default"
@@ -202,7 +205,6 @@ export type PropertyDetailPricingProps = {
   periodLabel: string
   amountLabel: string
   unitLabel?: string
-  certifiedLabel?: string
   note?: string
   extras?: PropertyDetailPricingExtra[]
   className?: string

@@ -2,6 +2,12 @@ import { propertyApi } from "@/lib/api/properties"
 import type { PropertyApiResponse } from "@/lib/api/types"
 import { getTransactionId } from "@/lib/routing/routes"
 
+import {
+  resolvePropertyMediaKind,
+  type PropertyMedia,
+} from "@/features/catalog/resolvePropertyMedia"
+import { resolveSuperCategorieLabel } from "@/features/catalog/resolveSuperCategorieLabel"
+
 import type { CatalogFilterQuery, CatalogIdFilters, Property } from "../types"
 
 type GetPropertiesParams = {
@@ -88,15 +94,6 @@ export async function getFilteringProperties({
 
 const VISUELS_BASE = "https://immoaskprodapi.omnisoft.africa/storage/uploads/visuels/proprietes/"
 
-const OFFER_LABELS: Record<string, string> = {
-  vendre: "ACQUISITION",
-  vente: "ACQUISITION",
-  louer: "LOCATION",
-  location: "LOCATION",
-  bail: "BAIL",
-  investir: "INVESTISSEMENT",
-}
-
 function positiveAmount(value: number | null | undefined) {
   return typeof value === "number" && value > 0 ? value : null
 }
@@ -115,13 +112,6 @@ function resolveTitle(property: PropertyApiResponse, propertyType: string) {
   return propertyType || "Bien immobilier"
 }
 
-function resolveOfferLabel(denomination: string | null | undefined) {
-  if (!denomination) {
-    return ""
-  }
-  return OFFER_LABELS[denomination.toLowerCase()] ?? denomination
-}
-
 function resolveImageUri(uri: string | null) {
   if (!uri) {
     return null
@@ -130,6 +120,28 @@ function resolveImageUri(uri: string | null) {
     return uri
   }
   return `${VISUELS_BASE}${uri}`
+}
+
+function toPropertyMedia(
+  property: PropertyApiResponse,
+): PropertyMedia[] {
+  return (
+    property.visuels
+      ?.slice()
+      .sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
+      .map((visual) => {
+        const src = resolveImageUri(visual.uri)
+        if (!src) {
+          return null
+        }
+
+        return {
+          src,
+          kind: resolvePropertyMediaKind(visual.uri, visual.est_image),
+        }
+      })
+      .filter((item): item is PropertyMedia => Boolean(item)) ?? []
+  )
 }
 
 export function toCatalogProperty(property: PropertyApiResponse): Property {
@@ -153,6 +165,7 @@ export function toCatalogProperty(property: PropertyApiResponse): Property {
     ""
   const isFurnished =
     Boolean(property.est_meuble) || /meuble/i.test(propertyType)
+  const media = toPropertyMedia(property)
 
   return {
     id: property.id,
@@ -177,7 +190,7 @@ export function toCatalogProperty(property: PropertyApiResponse): Property {
 
     propertyType,
 
-    offerLabel: resolveOfferLabel(property.offre?.denomination),
+    offerLabel: resolveSuperCategorieLabel(property.super_categorie),
     badge: resolveBadge(property),
 
     location: [
@@ -197,13 +210,7 @@ export function toCatalogProperty(property: PropertyApiResponse): Property {
     parking: property.garage ?? null,
     area: property.surface ?? null,
 
-    images:
-      property.visuels
-        ?.slice()
-        .sort(
-          (a, b) => (a.position ?? 0) - (b.position ?? 0),
-        )
-        .map((image) => resolveImageUri(image.uri))
-        .filter((uri): uri is string => Boolean(uri)) ?? [],
+    media,
+    images: media.map((item) => item.src),
   }
 }

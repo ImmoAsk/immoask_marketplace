@@ -1,14 +1,6 @@
-import type { Property } from "@/features/properties/types"
 import type { BookFurnishedPropertyProperty } from "@/features/book_property/types"
-
-const OFFER_LABELS: Record<string, string> = {
-  vendre: "ACQUISITION",
-  vente: "ACQUISITION",
-  louer: "LOCATION",
-  location: "LOCATION",
-  bail: "BAIL",
-  investir: "INVESTISSEMENT",
-}
+import { resolveSuperCategorieLabel } from "@/features/catalog/resolveSuperCategorieLabel"
+import type { Property } from "@/features/properties/types"
 
 export function toBookFurnishedProperty(
   property: Property,
@@ -47,8 +39,7 @@ export function toBookFurnishedProperty(
     parking: property.parking,
     area: property.area,
     propertyType: property.propertyType,
-    offerLabel:
-      OFFER_LABELS[property.offreName?.trim().toLowerCase() ?? ""] ?? "",
+    offerLabel: resolveSuperCategorieLabel(property.superCategory),
     badge: property.badges[0] ?? null,
     images: property.images,
     roleName: property.agent?.roleName ?? null,

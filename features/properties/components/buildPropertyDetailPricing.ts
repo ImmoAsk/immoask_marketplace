@@ -73,7 +73,6 @@ export function buildPropertyDetailPricing(
       periodLabel: "Prix de vente",
       amountLabel: formatAmount(property.salePrice),
       unitLabel: "XOF",
-      certifiedLabel: "Tarif certifié",
       note: toPricingNote(property),
       extras: toFurnishedExtras(property, {
         isRent: false,
@@ -87,7 +86,6 @@ export function buildPropertyDetailPricing(
       periodLabel: "Loyer mensuel",
       amountLabel: formatAmount(property.monthlyPrice),
       unitLabel: "XOF / mois",
-      certifiedLabel: "Tarif certifié",
       note: toPricingNote(property),
       extras: toFurnishedExtras(property, {
         isRent: true,
@@ -101,7 +99,6 @@ export function buildPropertyDetailPricing(
       periodLabel: "Tarif nuitée",
       amountLabel: formatAmount(property.nightlyPrice),
       unitLabel: "XOF / nuit",
-      certifiedLabel: "Tarif certifié",
       note: toPricingNote(property),
       extras: toFurnishedExtras(property, {
         isRent: false,

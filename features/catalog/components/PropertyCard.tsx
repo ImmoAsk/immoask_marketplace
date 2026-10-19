@@ -1,6 +1,7 @@
 import Link from "next/link"
 
 import Card from "@/components/ui/Card"
+import { resolveSuperCategorieLabel } from "@/features/catalog/resolveSuperCategorieLabel"
 import type { Property } from "../types"
 import PropertyImage from "./PropertyImage"
 
@@ -137,9 +138,14 @@ function formatTitle(property: Property) {
 }
 
 export default function PropertyCard({ href, property }: PropertyCardProps) {
-  const image = property.images?.[0]
+  const cover = property.media?.[0] ?? (
+    property.images?.[0]
+      ? { src: property.images[0], kind: "image" as const }
+      : null
+  )
   const title = formatTitle(property)
   const cardPrice = toCardPrice(property)
+  const offerLabel = resolveSuperCategorieLabel(property.offerLabel)
 
   return (
     <Link
@@ -154,8 +160,8 @@ export default function PropertyCard({ href, property }: PropertyCardProps) {
       >
         <div className="relative overflow-hidden">
           <div className="transition duration-500 ease-out group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100">
-            {image ? (
-              <PropertyImage src={image} alt={title} />
+            {cover ? (
+              <PropertyImage src={cover.src} alt={title} kind={cover.kind} />
             ) : (
               <div
                 className="flex aspect-[16/10] items-center justify-center bg-primary-soft text-sm font-medium text-primary"
@@ -179,9 +185,9 @@ export default function PropertyCard({ href, property }: PropertyCardProps) {
         </div>
 
         <div className="flex flex-col gap-2.5 px-5 pb-0 pt-5">
-          {property.offerLabel ? (
+          {offerLabel ? (
             <p className="text-xs font-semibold uppercase tracking-wide text-primary">
-              {property.offerLabel}
+              {offerLabel}
             </p>
           ) : null}
 

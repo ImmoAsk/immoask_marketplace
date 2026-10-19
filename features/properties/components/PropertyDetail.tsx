@@ -48,10 +48,19 @@ function toGalleryImages(
   headline: string,
 ): PropertyGalleryImage[] {
   const fallback = headline || "Bien immobilier"
+  const media =
+    property.media?.length
+      ? property.media
+      : property.images.map((src) => ({ src, kind: "image" as const }))
 
-  return property.images.map((src, index) => ({
-    src,
-    alt: `${fallback} — photo ${index + 1}`,
+  return media.map((item, index) => ({
+    src: item.src,
+    kind: item.kind,
+    alt:
+      item.kind === "video"
+        ? `${fallback} — vidéo ${index + 1}`
+        : `${fallback} — photo ${index + 1}`,
+    label: item.kind === "video" ? "Vidéo" : undefined,
   }))
 }
 

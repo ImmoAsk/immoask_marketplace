@@ -6,6 +6,7 @@ import type { Property } from "@/features/catalog/types"
 import type {
   PayWithFedaPayInput,
   PayWithFedaPayResult,
+  SavePaymentTransactionResult,
 } from "@/lib/api/types"
 
 export type PayNowInput = PayWithFedaPayInput
@@ -18,6 +19,28 @@ export type PayNowProps = PayNowInput & {
   disabled?: boolean
   onPay?: () => void | Promise<void>
   onSuccess?: (result: PayNowResult) => void | Promise<void>
+  onError?: (error: Error) => void
+}
+
+export type PayLaterResult = SavePaymentTransactionResult
+
+export type PayLaterProps = {
+  label?: string
+  className?: string
+  disabled?: boolean
+  description: string
+  montant: number
+  type_transaction?: string
+  user_id?: number
+  propriete_id?: number
+  proprietaire_id?: number
+  contrat_id?: number
+  email_visitor?: string
+  telephone_visitor?: string
+  fullname_visitor?: string
+  transaction_id?: number
+  onPay?: () => void | Promise<void>
+  onSuccess?: (result: PayLaterResult) => void | Promise<void>
   onError?: (error: Error) => void
 }
 
@@ -51,7 +74,7 @@ export type PayVisitFeeVisit = {
 }
 
 export type PayVisitFeeProps = {
-  property: Property
+  property: Property & { proprietaireId?: number | null }
   propertyHref: string
   visit: PayVisitFeeVisit
   visitor?: PayVisitFeeVisitor | null
@@ -61,10 +84,12 @@ export type PayVisitFeeProps = {
   callbackUrl?: string
   title?: string
   editLabel?: string
+  payLaterLabel?: string
   className?: string
   onEditVisit: () => void
   onPay?: () => void | Promise<void>
   onPaid?: (result: PayNowResult) => void
+  onDeferred?: (result: PayLaterResult) => void | Promise<void>
   onError?: (error: Error) => void
 }
 
@@ -78,7 +103,7 @@ export type PayFurnishedPropertyBooking = BookFurnishedPropertyAmounts & {
 }
 
 export type PayFurnishedPropertyProps = {
-  property: Property
+  property: Property & { proprietaireId?: number | null }
   propertyHref: string
   booking: PayFurnishedPropertyBooking
   guest?: PayFurnishedPropertyGuest | null

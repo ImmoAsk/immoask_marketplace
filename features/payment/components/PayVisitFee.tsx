@@ -5,6 +5,7 @@ import Link from "next/link"
 
 import Button from "@/components/ui/Button"
 import PropertyCard from "@/features/catalog/components/PropertyCard"
+import PayLater from "@/features/payment/components/PayLater"
 import PayNow from "@/features/payment/components/PayNow"
 import {
   PAYMENT_METHOD_OPTIONS,
@@ -56,10 +57,12 @@ export default function PayVisitFee({
   callbackUrl,
   title = "Paiement du droit de visite",
   editLabel = "Modifier la visite",
+  payLaterLabel = "Payer le droit de visite plus tard",
   className,
   onEditVisit,
   onPay,
   onPaid,
+  onDeferred,
   onError,
 }: PayVisitFeeProps) {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("mixx")
@@ -191,21 +194,35 @@ export default function PayVisitFee({
         </section>
 
         {canPay && visitor ? (
-          <PayNow
-            className="mt-6"
-            description={`Droit de visite N°${property.nuo} — ${selectedMethodLabel}`}
-            amount={visitFee}
-            firstname={visitor.firstname}
-            lastname={visitor.lastname}
-            phone={visitor.phone}
-            email={visitor.email}
-            callback_url={callbackUrl ?? toAbsoluteUrl(propertyHref)}
-            country_code={resolvedCountryCode || undefined}
-            currency={currency}
-            onPay={onPay}
-            onSuccess={onPaid}
-            onError={onError}
-          />
+          <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <PayNow
+              description={`Droit de visite N°${property.nuo} — ${selectedMethodLabel}`}
+              amount={visitFee}
+              firstname={visitor.firstname}
+              lastname={visitor.lastname}
+              phone={visitor.phone}
+              email={visitor.email}
+              callback_url={callbackUrl ?? toAbsoluteUrl(propertyHref)}
+              country_code={resolvedCountryCode || undefined}
+              currency={currency}
+              onPay={onPay}
+              onSuccess={onPaid}
+              onError={onError}
+            />
+            <PayLater
+              label={payLaterLabel}
+              description={`Droit de visite N°${property.nuo} — paiement différé`}
+              montant={visitFee}
+              propriete_id={property.id}
+              proprietaire_id={property.proprietaireId ?? undefined}
+              email_visitor={visitor.email}
+              telephone_visitor={visitor.phone}
+              fullname_visitor={visitor.name}
+              onPay={onPay}
+              onSuccess={onDeferred}
+              onError={onError}
+            />
+          </div>
         ) : (
           <p className="mt-6 rounded-xl bg-surface px-4 py-3 text-sm text-muted">
             Connectez-vous pour payer le droit de visite.{" "}

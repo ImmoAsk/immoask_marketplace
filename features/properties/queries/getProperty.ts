@@ -1,5 +1,9 @@
 import { cache } from "react"
 
+import {
+  resolvePropertyMediaKind,
+  type PropertyMedia,
+} from "@/features/catalog/resolvePropertyMedia"
 import { propertyApi } from "@/lib/api/properties"
 import type { PropertyApiResponse } from "@/lib/api/types"
 import { getCountry } from "@/lib/routing/countries"
@@ -34,6 +38,26 @@ function resolveImageUri(uri: string | null) {
   }
 
   return `${VISUELS_BASE}${uri}`
+}
+
+function toPropertyMedia(property: PropertyApiResponse): PropertyMedia[] {
+  return (
+    property.visuels
+      ?.slice()
+      .sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
+      .map((visual) => {
+        const src = resolveImageUri(visual.uri)
+        if (!src) {
+          return null
+        }
+
+        return {
+          src,
+          kind: resolvePropertyMediaKind(visual.uri, visual.est_image),
+        }
+      })
+      .filter((item): item is PropertyMedia => Boolean(item)) ?? []
+  )
 }
 
 function resolveBadges(property: PropertyApiResponse) {
@@ -185,6 +209,7 @@ function toProperty(property: PropertyApiResponse): Property {
   const monthlyPrice = positiveAmount(property.cout_mensuel)
   const salePrice = positiveAmount(property.cout_vente)
   const nightlyPrice = positiveAmount(property.nuitee)
+  const media = toPropertyMedia(property)
 
   return {
     id: toPropertyId(property.id),
@@ -211,12 +236,8 @@ function toProperty(property: PropertyApiResponse): Property {
     livingRooms: property.salon,
     parking: property.garage,
     area: property.surface,
-    images:
-      property.visuels
-        ?.slice()
-        .sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
-        .map((image) => resolveImageUri(image.uri))
-        .filter((uri): uri is string => Boolean(uri)) ?? [],
+    media,
+    images: media.map((item) => item.src),
     badges: resolveBadges(property),
     countryCode: property.pays?.code?.toLowerCase() ?? "",
     offreId: property.offre?.id != null ? Number(property.offre.id) : null,

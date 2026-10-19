@@ -1,5 +1,7 @@
 import type { ReactNode } from "react"
 
+import type { PropertyMedia } from "@/features/catalog/resolvePropertyMedia"
+
 export type CatalogIdFilters = {
   usage?: number
   categorie?: number
@@ -59,6 +61,7 @@ export type Property = {
   offerLabel: string
   badge: string | null
   images: string[] | null
+  media: PropertyMedia[]
 }
 
 export type CatalogFilteringFormOffer = "all" | "rent" | "sale" | "furnished"

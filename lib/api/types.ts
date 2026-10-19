@@ -2,6 +2,10 @@ export type GraphQLResponse<T> = {
   data?: T
   errors?: Array<{
     message: string
+    extensions?: {
+      debugMessage?: string
+      [key: string]: unknown
+    }
   }>
 }
 
@@ -222,6 +226,7 @@ export interface PropertyApiResponse {
   visuels: Array<{
     uri: string | null
     position: number | null
+    est_image?: "Image" | "Video" | string | null
   }> | null
 
   user?: {
@@ -437,8 +442,70 @@ export type PayWithFedaPayData = {
   payWithFedaPay: PayWithFedaPayResult | null
 }
 
+export type PaymentTransactionInput = {
+  user_id: number
+  description: string
+  type_transaction: string
+  montant: number
+  propriete_id?: number
+  proprietaire_id?: number
+  contrat_id?: number
+  email_visitor?: string
+  telephone_visitor?: string
+  fullname_visitor?: string
+  transaction_id?: number
+}
+
+export type SavePaymentTransactionInput = PaymentTransactionInput
+
+export type SavePaymentTransactionVariables = {
+  input: PaymentTransactionInput
+}
+
+export type PaymentTransactionUser = {
+  id: string | number | null
+  name: string | null
+  email: string | null
+  phone: string | null
+}
+
+export type PaymentTransactionProperty = {
+  id: string | number
+  nuo: number | null
+  titre: string | null
+}
+
+export type PaymentTransactionContract = {
+  id: string | number
+}
+
+export type SavePaymentTransactionResult = {
+  id: string | number
+  statut: number | null
+  email_visitor: string | null
+  telephone_visitor: string | null
+  fullname_visitor: string | null
+  montant: number
+  description: string | null
+  type_transaction: string | null
+  date_transaction: string | null
+  transaction_id: number | null
+  propriete: PaymentTransactionProperty | null
+  client: PaymentTransactionUser | null
+  proprietaire: PaymentTransactionUser | null
+  contrat: PaymentTransactionContract | null
+}
+
+export type SavePaymentTransactionData = {
+  createPaymentTransaction: SavePaymentTransactionResult | null
+}
+
 export interface PaymentApi {
   payWithFedaPay(input: PayWithFedaPayInput): Promise<PayWithFedaPayResult>
+  savePaymentTransaction(
+    input: SavePaymentTransactionInput,
+    accessToken?: string | null,
+  ): Promise<SavePaymentTransactionResult>
 }
 
 export type VisiteInput = {

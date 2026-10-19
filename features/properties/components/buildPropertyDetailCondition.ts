@@ -8,6 +8,23 @@ function formatAmount(value: number) {
   return new Intl.NumberFormat("fr-FR").format(value)
 }
 
+function formatDepositOrAdvanceValue(
+  value: number,
+  kind: "deposit" | "advance",
+) {
+  if (value >= 1 && value <= 24) {
+    return kind === "deposit"
+      ? `${value} mois (Négociable)`
+      : `${value} mois exigibles`
+  }
+
+  if (value > 24) {
+    return `${formatAmount(value)} FCFA`
+  }
+
+  return kind === "deposit" ? "Négociable" : "Selon contrat"
+}
+
 function pushItem(
   items: PropertyDetailConditionItem[],
   label: string,
@@ -67,14 +84,14 @@ export function buildPropertyDetailCondition(
       items,
       "Dépôt de garantie (Caution)",
       depositMonths != null
-        ? `${depositMonths} mois (Négociable)`
+        ? formatDepositOrAdvanceValue(depositMonths, "deposit")
         : "Négociable",
     )
     pushItem(
       items,
       "Avance de loyer",
       depositMonths != null
-        ? `${depositMonths} mois exigibles`
+        ? formatDepositOrAdvanceValue(depositMonths, "advance")
         : "Selon contrat",
     )
   } else if (property.salePrice != null) {

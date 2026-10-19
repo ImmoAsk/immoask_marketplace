@@ -158,6 +158,11 @@ export default function VisitPropertyTourModal({
             await onSubmit?.(visit)
             await onPaid?.(result, visit)
           }}
+          onDeferred={async () => {
+            setFeedbackStatus("success")
+            setStep("feedback")
+            await onSubmit?.(visit)
+          }}
           onError={() => {
             setFeedbackStatus("failure")
             setStep("feedback")

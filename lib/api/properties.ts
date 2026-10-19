@@ -79,6 +79,7 @@ const GET_PROPERTY_QUERY = `
       visuels {
         uri
         position
+        est_image
       }
 
       user {
@@ -110,6 +111,7 @@ const PROPERTY_LIST_FIELDS = `
       nuitee
       lat_long
       nuo
+      super_categorie
       usage
       piece
       titre
@@ -151,6 +153,7 @@ const PROPERTY_LIST_FIELDS = `
       visuels {
         uri
         position
+        est_image
       }
 
       badge_propriete {
@@ -519,6 +522,7 @@ const LATEST_PROPERTIES_FIELDS = `
       surface
       nuitee
       nuo
+      super_categorie
       usage
       piece
       titre
@@ -556,6 +560,7 @@ const LATEST_PROPERTIES_FIELDS = `
       visuels {
         uri
         position
+        est_image
       }
 
       badge_propriete {
