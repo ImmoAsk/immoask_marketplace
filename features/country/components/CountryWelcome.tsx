@@ -13,10 +13,12 @@ import {
 } from "@/features/country/welcomeData"
 import type { CountryWelcomeProps } from "@/features/country/types"
 import WelcomeAgentsMarquee from "@/features/realestate_agent_card/components/WelcomeAgentsMarquee"
-import { pickRandomSuperCategorieTab } from "@/features/super_categorie_tabs/components/buildSuperCategorieTabs"
+import { getSuperCategorieTab } from "@/features/super_categorie_tabs/components/buildSuperCategorieTabs"
 import { getCities } from "@/lib/api/locations"
 import { propertyApi } from "@/lib/api/properties"
+import type { LocationRecord, PropertyStatistic } from "@/lib/api/types"
 import { getCountryCallingCode } from "@/lib/routing/countries"
+import type { Property } from "@/features/catalog/types"
 
 import { buildCountryWelcomeJsonLd } from "./buildCountryWelcomeJsonLd"
 import {
@@ -104,23 +106,56 @@ const WELCOME_KPIS = [
   { icon: <PropertiesIcon />, title: "Biens immobiliers", number: "3 000+" },
 ]
 
+async function safeLatestProperties(input: {
+  paysId: number
+  usage: number
+  limit: number
+}): Promise<Property[]> {
+  try {
+    return await getLatestProperties(input)
+  } catch {
+    return []
+  }
+}
+
+async function safePropertyStatistics(): Promise<PropertyStatistic[]> {
+  try {
+    return await propertyApi.getPropertyStatistics()
+  } catch {
+    return []
+  }
+}
+
+async function safeCities(
+  callingCode: number,
+): Promise<LocationRecord[]> {
+  try {
+    return await getCities(callingCode)
+  } catch {
+    return []
+  }
+}
+
 export default async function CountryWelcome({
   countryCode,
   countryName,
 }: CountryWelcomeProps) {
-  const initialTab = pickRandomSuperCategorieTab()
+  // Deterministic default — Math.random during SSG can fail host prerender.
+  const initialTab = getSuperCategorieTab("se-loger")
   const callingCode = getCountryCallingCode(countryCode)
   const paysId = callingCode
   const [properties, propertyStatistics, cities] = await Promise.all([
     paysId != null
-      ? getLatestProperties({
+      ? safeLatestProperties({
           paysId,
           usage: initialTab.usage,
           limit: 9,
         })
-      : Promise.resolve([]),
-    propertyApi.getPropertyStatistics(),
-    callingCode ? getCities(callingCode) : Promise.resolve([]),
+      : Promise.resolve([] as Property[]),
+    safePropertyStatistics(),
+    callingCode != null
+      ? safeCities(callingCode)
+      : Promise.resolve([] as LocationRecord[]),
   ])
 
   const statistics = buildStatisticCards({
