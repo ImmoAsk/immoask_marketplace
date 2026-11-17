@@ -132,7 +132,8 @@ export function getWelcomeServices(countryCode: string): WelcomeService[] {
     {
       title: "Créer un contrat de gestion",
       subtitle: "Sécurisez vos revenus locatifs",
-      opensMobileAppAd: true,
+      href: "https://business.immoask.com",
+      opensMobileAppAd: false,
       icon: <DocumentIcon />,
     },
     {
@@ -144,7 +145,8 @@ export function getWelcomeServices(countryCode: string): WelcomeService[] {
     {
       title: "Gérer un bien immobilier",
       subtitle: "Espace propriétaire et syndic",
-      opensMobileAppAd: true,
+      href: "https://business.immoask.com",
+      opensMobileAppAd: false,
       icon: <ChartIcon />,
     },
   ]
